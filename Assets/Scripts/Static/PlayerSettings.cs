@@ -16,11 +16,13 @@ public static class PlayerSettings
         public bool ViewIntertedX;
         public bool ViewIntertedY;
 
+        public float minCameraRotationX;
+        public float maxCameraRotationX;
+
         [Header("Movement Settings")]
         public float WalkingFowardSpeed;
         public float WalkingStrafeSpeed;
         public float WalkingBackwardSpeed;
-
     }
 
 
