@@ -22,11 +22,6 @@ public class MouseLook : MonoBehaviour
         input.Character.View.performed += ctx => input_View = ctx.ReadValue<Vector2>();
     }
 
-    private void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
     private void OnEnable()
     {
         input.Enable();
@@ -35,6 +30,11 @@ public class MouseLook : MonoBehaviour
     private void OnDisable()
     {
         input.Disable();
+    }
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -55,6 +55,5 @@ public class MouseLook : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(RotationX, 0f, 0f);
         playerBody.Rotate(Vector3.up * mouseX);
-
     }
 }

@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
 {
     public bool CanMove { get; private set; } = true;
-    private bool IsSprinting => Input.GetKey(sprintKey) && canSprint;
-    private bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded;
-    private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && characterController.isGrounded && !duringCrouchAnimation;
+    private bool IsSprinting => GetPlayerSprint() && canSprint;
+    private bool ShouldJump => GetPlayerJumpThisFrame() && characterController.isGrounded;
+    private bool ShouldCrouch => GetPlayerCrouch() && characterController.isGrounded && !duringCrouchAnimation;
+    private bool isAiming => GetPlayerAim();
 
     [Header("Fucnitonal Options")]
     [SerializeField] private bool canSprint = true;
@@ -18,10 +20,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private bool HoldToZoom = false;
 
     [Header("Controls")]
-    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
-    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
-    [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
-    [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
+    private InputControl input;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 5f;
@@ -89,10 +88,47 @@ public class FirstPersonController : MonoBehaviour
 
     private void Awake()
     {
+        input = new InputControl();
         characterController = GetComponent<CharacterController>();
         playerCamera = GetComponentInChildren<Camera>();
         defaultYPos = playerCamera.transform.localPosition.y;
         defaultFOV = playerCamera.fieldOfView;
+    }
+
+    private void OnEnable()
+    {
+        input.Enable();
+    }
+
+    private void OnDisable()
+    {
+        input.Disable();
+    }
+
+    private Vector2 GetPlayerMovement()
+    {
+        return input.Character.Movement.ReadValue<Vector2>();
+    }
+
+    private bool GetPlayerSprint()
+    {
+        float sprint = input.Character.Sprint.ReadValue<float>();     
+        return sprint > 0 ? true : false;      
+    }
+
+    private bool GetPlayerJumpThisFrame()
+    {
+        return input.Character.Jump.triggered;
+    }
+
+    private bool GetPlayerCrouch()
+    {
+        return input.Character.Crouch.triggered;
+    }
+
+    private bool GetPlayerAim()
+    {
+        return input.Character.Aim.triggered;
     }
 
     private void Update()
@@ -119,11 +155,14 @@ public class FirstPersonController : MonoBehaviour
 
     private void HandleMovementInput()
     {
-        currentInput = new Vector2((isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"), (isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Horizontal"));
+        Vector3 dir = GetPlayerMovement().normalized;
+        currentInput = new Vector2((isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.x, (isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.y);
 
         float moveDirectionY = moveDirection.y;
-        moveDirection = (transform.TransformDirection(Vector3.forward)) * currentInput.x + (transform.TransformDirection(Vector3.right)) * currentInput.y;
+        moveDirection = transform.TransformDirection(Vector3.right) * currentInput.x + transform.TransformDirection(Vector3.forward).normalized * currentInput.y;
+
         moveDirection.y = moveDirectionY;
+
     }
 
     private void HanldeJump()
@@ -156,7 +195,7 @@ public class FirstPersonController : MonoBehaviour
     {
         if (!HoldToZoom)
         {
-            if (Input.GetKeyDown(zoomKey))
+            if (isAiming)
             {
                 if (!zoomPressed)
                 {
@@ -182,7 +221,7 @@ public class FirstPersonController : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyDown(zoomKey))
+            if (isAiming)
             {
                 if (zoomRoutine != null)
                 {
@@ -192,7 +231,7 @@ public class FirstPersonController : MonoBehaviour
                 zoomRoutine = StartCoroutine(ToggleZoom(true));
             }
 
-            if (Input.GetKeyUp(zoomKey))
+            if (isAiming)
             {
                 if (zoomRoutine != null)
                 {
