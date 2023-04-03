@@ -5,54 +5,56 @@ using UnityEngine;
 [RequireComponent(typeof(FirstPersonController))]
 public class GunControl : MonoBehaviour
 {
-    Camera playerCamera;
+    private bool isAiming => input.GetPlayerAim();
 
+    [SerializeField] GameObject gun;
+
+    // Atualizar depois para mudar de arma usando Scriptable Objects
     [Header("Gun Parameters")]
     [SerializeField] private float damage = 10f;
     [SerializeField] private float range = 100f;
     [SerializeField] private float fireRate = 10f;
 
+    [Header("Zoom Parameters")]
+    [SerializeField] private Transform defaultPos;
+    [SerializeField] private Transform AimPos;
+    [SerializeField] private bool canZoom = true;
+    [SerializeField] private bool HoldToZoom = false;
+    [SerializeField] private float timeToZoom = 0.3f;
+    [SerializeField] private float zoomFOV = 30f;
+
     [Header("Particle System")]
     [SerializeField] private ParticleSystem muzzleFlash;
+    [SerializeField] private ParticleSystem bullet;
 
-    private InputControl input;
+    private float defaultFOV;
+    private Coroutine zoomRoutine;
+    private bool zoomPressed = false;
+
+    private Camera playerCamera;
+    private InputManager input;
 
     private float time;
     private bool canFire = false;
 
-    private void Awake()
-    {
-        input = new InputControl();
-    }
-
-    private void OnEnable()
-    {
-        input.Enable();
-    }
-
-    private void OnDisable()
-    {
-        input.Disable();
-    }
-
-    private bool PlayerShootThisFrame()
-    {
-        float shoot = input.Character.Shoot.ReadValue<float>();
-        return shoot > 0 ? true : false;
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
+        input = InputManager.Instance;
+        defaultFOV = playerCamera.fieldOfView;
+
+        gun.transform.position = defaultPos.position;
+        gun.transform.rotation = defaultPos.rotation;
     }
 
-    // Update is called once per frame
     void Update()
     {
         FireRateHandle();
-        if (PlayerShootThisFrame() && canFire)       
-            Shoot();        
+        if (input.PlayerShootThisFrame() && canFire)       
+            Shoot();
+
+        if (canZoom)
+            HandleZoom();
     }
 
     private void FireRateHandle()
@@ -77,6 +79,83 @@ public class GunControl : MonoBehaviour
             Debug.LogWarning($"Hit {hit.collider.name}");
         }
 
+        bullet.Play();
         muzzleFlash.Play();
+    }
+
+    private void HandleZoom()
+    {
+        if (!HoldToZoom)
+        {
+            if (isAiming)
+            {
+                if (!zoomPressed)
+                {
+                    zoomPressed = true;
+                    if (zoomRoutine != null)
+                    {
+                        StopCoroutine(zoomRoutine);
+                        zoomRoutine = null;
+                    }
+                    zoomRoutine = StartCoroutine(ToggleZoom(zoomPressed));
+                }
+                else
+                {
+                    zoomPressed = false;
+                    if (zoomRoutine != null)
+                    {
+                        StopCoroutine(zoomRoutine);
+                        zoomRoutine = null;
+                    }
+                    zoomRoutine = StartCoroutine(ToggleZoom(zoomPressed));
+                }
+            }
+        }
+        else
+        {
+            if (isAiming)
+            {
+                if (zoomRoutine != null)
+                {
+                    StopCoroutine(zoomRoutine);
+                    zoomRoutine = null;
+                }
+                zoomRoutine = StartCoroutine(ToggleZoom(true));
+            }
+
+            if (isAiming)
+            {
+                if (zoomRoutine != null)
+                {
+                    StopCoroutine(zoomRoutine);
+                    zoomRoutine = null;
+                }
+                zoomRoutine = StartCoroutine(ToggleZoom(false));
+            }
+        }
+    }
+
+    private IEnumerator ToggleZoom(bool IsEnter)
+    {
+        Vector3 targetPos = IsEnter ? AimPos.localPosition : defaultPos.localPosition;
+        Quaternion targetRot = IsEnter ? AimPos.localRotation : defaultPos.localRotation;
+
+        float targetFOV = IsEnter ? zoomFOV : defaultFOV;
+        float startingFOV = playerCamera.fieldOfView;
+        float timeElapsed = 0;
+
+        while (timeElapsed < timeToZoom)
+        {
+            gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, targetPos, timeElapsed / timeToZoom);
+            gun.transform.localRotation = Quaternion.Lerp(gun.transform.localRotation, targetRot, timeElapsed / timeToZoom);
+
+            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed / timeToZoom);
+
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        playerCamera.fieldOfView = targetFOV;
+        zoomRoutine = null;
     }
 }
