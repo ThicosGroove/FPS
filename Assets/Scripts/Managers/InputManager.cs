@@ -22,9 +22,15 @@ public class InputManager : Singleton<InputManager>
         input.Disable();
     }
 
+    #region Player Input
     public Vector2 GetPlayerMovement()
     {
         return input.Character.Movement.ReadValue<Vector2>();
+    }
+
+    public Vector2 GetPlayerMouseMovement()
+    {
+        return input.Character.View.ReadValue<Vector2>();
     }
 
     public bool GetPlayerSprint()
@@ -53,5 +59,16 @@ public class InputManager : Singleton<InputManager>
         float shoot = input.Character.Shoot.ReadValue<float>();
         return shoot > 0 ? true : false;
     }
+
+    #endregion
+
+    #region System Input
+
+    public bool PlayerPause()
+    {
+        return input.System.Pause.triggered;
+    }
+
+    #endregion
 
 }
