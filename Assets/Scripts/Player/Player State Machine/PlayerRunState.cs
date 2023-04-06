@@ -4,17 +4,30 @@ using UnityEngine;
 
 public class PlayerRunState : PlayerBaseState
 {
-    public override void EnterState(PlayerStateManager ctx)
+    public PlayerRunState(PlayerStateManager currentContext, PlayerStateFactory playerStateFactory) 
+    : base (currentContext, playerStateFactory) { }
+
+    public override void CheckSwitchStates()
+    {
+       
+    }
+
+    public override void EnterState()
     {
         
     }
 
-    public override void ExitState(PlayerStateManager ctx)
+    public override void ExitState()
     {
         
     }
 
-    public override void UpdateState(PlayerStateManager ctx)
+    public override void InitializeSubState()
+    {
+      
+    }
+
+    public override void UpdateState()
     {
         
     }

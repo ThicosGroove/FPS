@@ -17,7 +17,6 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private bool canUseHeadBob = true;
     [SerializeField] private bool WillSlideOnSlopes = true;
 
-
     [Header("Controls")]
     private InputManager input;
 
@@ -49,9 +48,6 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float crouchBobAmount = 0.025f;
     private float defaultYPos = 0;
     private float timer;
-
-
-
 
     // SLIDING PARAMETERS
     private Vector3 hitPointNormal;
@@ -102,9 +98,7 @@ public class FirstPersonController : MonoBehaviour
 
             if (canUseHeadBob)
                 HandleHeadBob();
-
             
-
             ApplyFinalMovements();
         }
     }

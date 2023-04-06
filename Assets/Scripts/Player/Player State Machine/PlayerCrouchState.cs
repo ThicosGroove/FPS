@@ -4,29 +4,30 @@ using UnityEngine;
 
 public class PlayerCrouchState : PlayerBaseState
 {
-    public override void EnterState(PlayerStateManager ctx)
+    public PlayerCrouchState(PlayerStateManager currentContext, PlayerStateFactory playerStateFactory)
+    : base(currentContext, playerStateFactory) { }
+
+    public override void CheckSwitchStates()
     {
         
     }
 
-    public override void ExitState(PlayerStateManager ctx)
+    public override void EnterState()
     {
         
     }
 
-    public override void UpdateState(PlayerStateManager ctx)
+    public override void ExitState()
     {
         
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public override void InitializeSubState()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void UpdateState()
     {
         
     }

@@ -2,9 +2,37 @@ using UnityEngine;
 
 public abstract class PlayerBaseState
 {
-   public abstract void EnterState(PlayerStateManager ctx);
+    protected PlayerStateManager _ctx;
+    protected PlayerStateFactory _factory;
 
-   public abstract void UpdateState(PlayerStateManager ctx);
+    public PlayerBaseState(PlayerStateManager currentContext, PlayerStateFactory playerStateFactory)
+    {
+        _ctx = currentContext;
+        _factory = playerStateFactory;
+    }
 
-   public abstract void ExitState(PlayerStateManager ctx);
+    public abstract void EnterState();
+
+    public abstract void UpdateState();
+
+    public abstract void ExitState();
+
+    public abstract void CheckSwitchStates();
+
+    public abstract void InitializeSubState();
+
+    void UpdateStates() { }
+
+    protected void SwitchState(PlayerBaseState newState) 
+    {
+        ExitState();
+
+        newState.EnterState();
+
+        _ctx.CurrentState = newState;
+    }
+
+    protected void SetSuperState() { }
+
+    protected void SetSubState() { }
 }

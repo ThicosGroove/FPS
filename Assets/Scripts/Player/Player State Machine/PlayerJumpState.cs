@@ -4,30 +4,36 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerBaseState
 {
-    public override void EnterState(PlayerStateManager ctx)
+    public PlayerJumpState(PlayerStateManager currentContext, PlayerStateFactory playerStateFactory)
+    : base(currentContext, playerStateFactory) { }
+
+    public override void CheckSwitchStates()
     {
-       
+        
     }
 
-    public override void ExitState(PlayerStateManager ctx)
+    public override void EnterState()
+    {
+        HandleJump();
+    }
+
+    public override void ExitState()
     {
     
     }
 
-    public override void UpdateState(PlayerStateManager ctx)
-    {
-       
-    }
-
-    // Start is called before the first frame update
-    void Start()
+    public override void InitializeSubState()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void UpdateState()
     {
-        
+
+    }
+
+    void HandleJump()
+    {
+        _ctx.MoveDirectionY = _ctx.JumpForce;
     }
 }

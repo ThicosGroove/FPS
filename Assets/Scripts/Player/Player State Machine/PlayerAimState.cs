@@ -4,30 +4,31 @@ using UnityEngine;
 
 public class PlayerAimState : PlayerBaseState
 {
-    public override void EnterState(PlayerStateManager ctx)
+    public PlayerAimState(PlayerStateManager currentContext, PlayerStateFactory playerStateFactory)
+    : base(currentContext, playerStateFactory) { }
+
+    public override void CheckSwitchStates()
     {
         
     }
 
-    public override void ExitState(PlayerStateManager ctx)
+    public override void EnterState()
+    {
+        
+    }
+
+    public override void ExitState()
     {
        
     }
 
-    public override void UpdateState(PlayerStateManager ctx)
+    public override void InitializeSubState()
+    {
+
+    }
+
+    public override void UpdateState()
     {
        
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
