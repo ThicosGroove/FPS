@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerStateManager : MonoBehaviour
 {   
-    private CharacterController characterController;
+    private CharacterController _characterController;
     private Camera playerCamera;
 
     [Header("Fucnitonal Options")]
@@ -24,7 +24,8 @@ public class PlayerStateManager : MonoBehaviour
 
     [Header("Jumping Parameters")]
     [SerializeField] private float _jumpForce = 8f;
-    [SerializeField] private float _gravity = 30f;
+    [SerializeField] private float _jumpGravity = 20f;
+    [SerializeField] private float _gravityMiltiplier = 150f;
 
     [Header("Crouch Parameters")]
     [SerializeField] private float _crouchHeight = 0.5f;
@@ -49,28 +50,42 @@ public class PlayerStateManager : MonoBehaviour
     private Vector3 hitPointNormal;
 
     private Vector3 _moveDirection;
-    private Vector2 _currentInput;
+    //private Vector2 _currentInput;
 
     //States variables
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
 
-    private bool _isSprinting => input.GetPlayerSprint() && canSprint;
-    private bool _shouldJump => input.GetPlayerJumpThisFrame() && characterController.isGrounded;
-    private bool _shouldCrouch => input.GetPlayerCrouch() && characterController.isGrounded && !duringCrouchAnimation;
-    private bool _isAiming => input.GetPlayerAim();
+    //private bool _isSprinting => input.GetPlayerSprint() && canSprint;
+    //private bool _shouldJump => input.GetPlayerJumpThisFrame() && _characterController.isGrounded;
+    //private bool _shouldCrouch => input.GetPlayerCrouch() && _characterController.isGrounded && !duringCrouchAnimation;
+    //private bool _isAiming => input.GetPlayerAim();
+
+    [SerializeField]private bool _isMoving;
+    [SerializeField]private bool _isSprinting;
+    [SerializeField]private bool _shouldJump;
+    [SerializeField]private bool _shouldCrouch;
+    [SerializeField]private bool _isAiming;
+    [SerializeField]private Vector2 _currentInput;
 
     //Getters and Setters
+    public CharacterController CharacterController { get { return _characterController; } }
+
     public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
     public bool CanMove { get; private set; } = true;
+
+    public bool IsMoving { get { return _isMoving; } }
     public bool IsSprinting { get { return _isSprinting; } }
     public bool ShouldJump { get { return _shouldJump; } }
     public bool ShouldCrouch { get { return _shouldCrouch; } }
     public bool IsAiming { get { return _isAiming; } }
+    public Vector2 CurrentInput { get { return _currentInput; } }
 
+    public Vector3 MoveDirection { get { return _moveDirection; } set { _moveDirection = value; } }
     public float MoveDirectionX { get { return _moveDirection.x; } set { _moveDirection.x = value; } }
     public float MoveDirectionY { get { return _moveDirection.y; } set { _moveDirection.y = value; } }
     public float MoveDirectionZ { get { return _moveDirection.z; } set { _moveDirection.z = value; } }
+
     public float WalkSpeed { get { return _walkSpeed; } }
     public float SprintSpeed { get { return _sprintSpeed; } }
     public float CrouchSpeed { get { return _crouchSpeed; } }
@@ -80,10 +95,10 @@ public class PlayerStateManager : MonoBehaviour
     {
         get
         {
-            if (characterController.isGrounded && Physics.Raycast(transform.position, Vector3.down, out RaycastHit slopeHit, 3f))
+            if (_characterController.isGrounded && Physics.Raycast(transform.position, Vector3.down, out RaycastHit slopeHit, 3f))
             {
                 hitPointNormal = slopeHit.normal;
-                return Vector3.Angle(Vector3.up, hitPointNormal) > characterController.slopeLimit;
+                return Vector3.Angle(Vector3.up, hitPointNormal) > _characterController.slopeLimit;
             }
             else
             {
@@ -93,35 +108,52 @@ public class PlayerStateManager : MonoBehaviour
 
     }
     public float JumpForce { get { return _jumpForce; } }
-    public float Gravity { get { return _gravity; } }
+    public float Gravity { get { return _jumpGravity; } }
+    public float GravityMultiplier { get { return _gravityMiltiplier; } }
+    public bool IsGrounded { get { return _characterController.isGrounded; } }
 
 
     private void Awake()
     {
         _states = new PlayerStateFactory(this);
-        _currentState = _states.Idle();
+        _currentState = _states.Grounded();
         _currentState.EnterState();
 
-        input = InputManager.Instance;
-        characterController = GetComponent<CharacterController>();
+        _characterController = GetComponent<CharacterController>();
         playerCamera = GetComponentInChildren<Camera>();
         defaultYPos = playerCamera.transform.localPosition.y;
+
     }
 
     void Start()
     {
-
+        input = InputManager.Instance;
     }
 
     void Update()
     {
-
+        //GetPlayerInputs();
+        _currentState.UpdateStates();
+        _currentInput = input.GetPlayerMovement().normalized;
+        _shouldJump = input.GetPlayerJumpThisFrame();
+        _isMoving = input.IsPlayerMoving();
+        _isSprinting = input.GetPlayerSprint();
+        _shouldCrouch = input.GetPlayerCrouch();
+        _isAiming = input.GetPlayerAim();
     }
 
-    public void SwitchState(PlayerBaseState state)
+    private void GetPlayerInputs()
     {
-        _currentState = state;
-        //state._currentState();
+    }
+
+    void HandleGravity()
+    {
+        
+         _moveDirection.y -= _jumpGravity * Time.deltaTime;
+
+        //MoveDirectionY -= Gravity * Time.deltaTime;
+        //_moveDirection.y = MoveDirectionY;
+        CharacterController.Move(_moveDirection * Time.deltaTime);
     }
 
     private void HandleMovementInput()
@@ -130,10 +162,10 @@ public class PlayerStateManager : MonoBehaviour
         _currentInput = new Vector2((isCrouching ? _crouchSpeed : _isSprinting ? _sprintSpeed : _walkSpeed) * dir.x, (isCrouching ? _crouchSpeed : _isSprinting ? _sprintSpeed : _walkSpeed) * dir.y);
 
         float moveDirectionY = _moveDirection.y;
-        _moveDirection = transform.TransformDirection(Vector3.right) * _currentInput.x + transform.TransformDirection(Vector3.forward).normalized * _currentInput.y;
+         _moveDirection = transform.TransformDirection(Vector3.right) * _currentInput.x + transform.TransformDirection(Vector3.forward).normalized * _currentInput.y;
+        _characterController.Move(_moveDirection * Time.deltaTime);
 
         _moveDirection.y = moveDirectionY;
-
     }
 
     private void HanldeJump()
@@ -150,7 +182,7 @@ public class PlayerStateManager : MonoBehaviour
 
     private void HandleHeadBob()
     {
-        if (!characterController.isGrounded) return;
+        if (!_characterController.isGrounded) return;
 
         if (Mathf.Abs(_moveDirection.x) > 0.1f || Mathf.Abs(_moveDirection.z) > 0.1f)
         {
@@ -164,14 +196,14 @@ public class PlayerStateManager : MonoBehaviour
 
     private void ApplyFinalMovements()
     {
-        if (!characterController.isGrounded)
-            _moveDirection.y -= _gravity * Time.deltaTime;
+        if (!_characterController.isGrounded)
+            _moveDirection.y -= _jumpGravity * Time.deltaTime;
 
         if (WillSlideOnSlopes && IsSliding)
             _moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * _slopeSpeed;
 
 
-        characterController.Move(_moveDirection * Time.deltaTime);
+        _characterController.Move(_moveDirection * Time.deltaTime);
     }
 
     private IEnumerator CrouchStand()
@@ -183,20 +215,20 @@ public class PlayerStateManager : MonoBehaviour
 
         float timeElapsed = 0;
         float targetHeight = isCrouching ? _standingHeight : _crouchHeight;
-        float currentHeight = characterController.height;
+        float currentHeight = _characterController.height;
         Vector3 targetCenter = isCrouching ? standingCenter : crouchingCenter;
-        Vector3 currentCenter = characterController.center;
+        Vector3 currentCenter = _characterController.center;
 
         while (timeElapsed < _timeToCrouch)
         {
-            characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / _timeToCrouch);
-            characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / _timeToCrouch);
+            _characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / _timeToCrouch);
+            _characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / _timeToCrouch);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
 
-        characterController.height = targetHeight;
-        characterController.center = targetCenter;
+        _characterController.height = targetHeight;
+        _characterController.center = targetCenter;
 
         isCrouching = !isCrouching;
 

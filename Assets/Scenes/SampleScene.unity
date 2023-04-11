@@ -6925,6 +6925,7 @@ GameObject:
   - component: {fileID: 1240406188}
   - component: {fileID: 1240406186}
   - component: {fileID: 1240406185}
+  - component: {fileID: 1240406187}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6939,7 +6940,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1240406184}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f85bb297878aee499a7d39d94348446, type: 3}
   m_Name: 
@@ -6984,6 +6985,47 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1240406187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240406184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c7b3df0ec2d5543af40697624a9c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canSprint: 1
+  canJump: 1
+  canCrouch: 1
+  canUseHeadBob: 1
+  WillSlideOnSlopes: 1
+  _walkSpeed: 3
+  _sprintSpeed: 5
+  _crouchSpeed: 2.5
+  _slopeSpeed: 8
+  _jumpForce: 8
+  _jumpGravity: 20
+  _gravityMiltiplier: 150
+  _crouchHeight: 0.5
+  _standingHeight: 2
+  _timeToCrouch: 0.25
+  crouchingCenter: {x: 0, y: 0.5, z: 0}
+  standingCenter: {x: 0, y: 0, z: 0}
+  walkBobSpeed: 14
+  walkBobAmount: 0.05
+  sprintBobSpeed: 18
+  sprintBobAmount: 0.1
+  crouchBobSpeed: 8
+  crouchBobAmount: 0.025
+  _isMoving: 0
+  _isSprinting: 0
+  _shouldJump: 0
+  _shouldCrouch: 0
+  _isAiming: 0
+  _currentInput: {x: 0, y: 0}
 --- !u!23 &1240406188
 MeshRenderer:
   m_ObjectHideFlags: 0

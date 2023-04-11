@@ -19,6 +19,7 @@ public class FirstPersonController : MonoBehaviour
 
     [Header("Controls")]
     private InputManager input;
+    [SerializeField] private bool _isAiming;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 5f;
@@ -49,6 +50,12 @@ public class FirstPersonController : MonoBehaviour
     private float defaultYPos = 0;
     private float timer;
 
+    private CharacterController characterController;
+    private Camera playerCamera;
+
+    private Vector3 moveDirection;
+    private Vector2 currentInput;
+
     // SLIDING PARAMETERS
     private Vector3 hitPointNormal;
 
@@ -69,12 +76,6 @@ public class FirstPersonController : MonoBehaviour
 
     }
     // SLIDING PARAMETERS
-
-    private CharacterController characterController;
-    private Camera playerCamera;
-
-    private Vector3 moveDirection;
-    private Vector2 currentInput;
 
     private void Awake()
     {
@@ -106,13 +107,12 @@ public class FirstPersonController : MonoBehaviour
     private void HandleMovementInput()
     {
         Vector3 dir = input.GetPlayerMovement().normalized;
-        currentInput = new Vector2((isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.x, (isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.y);
+        currentInput = new Vector2((isCrouching ? crouchSpeed : isAiming? walkSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.x, (isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.y);
 
         float moveDirectionY = moveDirection.y;
         moveDirection = transform.TransformDirection(Vector3.right) * currentInput.x + transform.TransformDirection(Vector3.forward).normalized * currentInput.y;
 
         moveDirection.y = moveDirectionY;
-
     }
 
     private void HanldeJump()
@@ -139,9 +139,7 @@ public class FirstPersonController : MonoBehaviour
                 defaultYPos + Mathf.Sin(timer) * (isCrouching ? crouchBobAmount : IsSprinting ? sprintBobAmount : walkBobAmount),
                 playerCamera.transform.localPosition.z);
         }
-    }
-
-   
+    }   
 
     private void ApplyFinalMovements()
     {
@@ -150,7 +148,6 @@ public class FirstPersonController : MonoBehaviour
 
         if (WillSlideOnSlopes && IsSliding)
             moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
-
 
         characterController.Move(moveDirection * Time.deltaTime);
     }

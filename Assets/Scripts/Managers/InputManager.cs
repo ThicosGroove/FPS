@@ -28,6 +28,15 @@ public class InputManager : Singleton<InputManager>
         return input.Character.Movement.ReadValue<Vector2>();
     }
 
+    public bool IsPlayerMoving()
+    {
+        Vector2 newInput = input.Character.Movement.ReadValue<Vector2>();
+
+        if (Mathf.Abs(newInput.x) > Mathf.Epsilon || Mathf.Abs( newInput.y) > Mathf.Epsilon) return true;
+
+        else return false;
+    }
+
     public Vector2 GetPlayerMouseMovement()
     {
         return input.Character.View.ReadValue<Vector2>();

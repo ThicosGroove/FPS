@@ -1,9 +1,14 @@
-using UnityEngine;
-
 public abstract class PlayerBaseState
 {
-    protected PlayerStateManager _ctx;
-    protected PlayerStateFactory _factory;
+    private bool _isRootState = false;
+    private PlayerStateManager _ctx;
+    private PlayerStateFactory _factory;
+    private PlayerBaseState _currentSubState;
+    private PlayerBaseState _currentSuperState;
+
+    protected bool IsRootState { set { _isRootState = value; } }
+    protected PlayerStateManager CTX { get { return _ctx; } }
+    protected PlayerStateFactory Factory { get { return _factory; } }
 
     public PlayerBaseState(PlayerStateManager currentContext, PlayerStateFactory playerStateFactory)
     {
@@ -21,18 +26,39 @@ public abstract class PlayerBaseState
 
     public abstract void InitializeSubState();
 
-    void UpdateStates() { }
+    public void UpdateStates()
+    {
+        UpdateState();
+        if (_currentSubState != null)
+        {
+            _currentSubState.UpdateStates();
+        }
+    }
 
-    protected void SwitchState(PlayerBaseState newState) 
+    protected void SwitchState(PlayerBaseState newState)
     {
         ExitState();
 
         newState.EnterState();
 
-        _ctx.CurrentState = newState;
+        if (_isRootState)
+        {
+            _ctx.CurrentState = newState;
+        }
+        else if (_currentSuperState != null)
+        {
+            _currentSuperState.SetSubState(newState);
+        }
     }
 
-    protected void SetSuperState() { }
+    protected void SetSuperState(PlayerBaseState newSuperState)
+    {
+        _currentSuperState = newSuperState;
+    }
 
-    protected void SetSubState() { }
+    protected void SetSubState(PlayerBaseState newSubState)
+    {
+        _currentSubState = newSubState;
+        newSubState.SetSuperState(this);
+    }
 }

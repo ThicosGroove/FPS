@@ -7,14 +7,13 @@ public class PlayerIdleState : PlayerBaseState
     public PlayerIdleState(PlayerStateManager currentContext, PlayerStateFactory playerStateFactory)
     : base(currentContext, playerStateFactory) { }
 
-    public override void CheckSwitchStates()
-    {
-     
-    }
+
 
     public override void EnterState()
     {
-        Debug.LogWarning("Hello from the Idle State");
+        Debug.LogWarning("iDLE STATE");
+        CTX.MoveDirectionX = 0;
+        CTX.MoveDirectionY = 0;
     }
 
     public override void ExitState()
@@ -28,7 +27,19 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void UpdateState()
     {
+        CheckSwitchStates();
+    }
 
+    public override void CheckSwitchStates()
+    {
+        if (CTX.IsMoving && CTX.IsSprinting)
+        {
+            SwitchState(Factory.Run());
+        }
+        else if (CTX.IsMoving)
+        {
+            SwitchState(Factory.Walk());
+        }
     }
 
 }
