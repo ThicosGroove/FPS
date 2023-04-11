@@ -6,53 +6,37 @@ public class GunControl : MonoBehaviour
 {
     public bool isAiming => input.GetPlayerAim();
 
-    [Header("Nessessary Obj")]
-    [SerializeField] GameObject gun;
-    [SerializeField] private Camera playerCamera;
+    [SerializeField] private WeaponSO weaponSO;
 
-    // Atualizar depois para mudar de arma usando Scriptable Objects
-    [Header("Gun Parameters")]
-    [SerializeField] private float damage = 10f;
-    [SerializeField] private float range = 100f;
-    [SerializeField] private float fireRate = 10f;
-
-    [Header("Zoom Parameters")]
-    [SerializeField] private Transform defaultPos;
-    [SerializeField] private Transform AimPos;
-    [SerializeField] private bool canZoom = true;
-    [SerializeField] private bool HoldToZoom = false;
-    [SerializeField] private float timeToZoom = 0.3f;
-    [SerializeField] private float zoomFOV = 30f;
-
-    [Header("Particle System")]
-    [SerializeField] private ParticleSystem muzzleFlash;
-    [SerializeField] private ParticleSystem bullet;
+    private InputManager input;
+    private Camera playerCamera;
 
     private float defaultFOV;
     private Coroutine zoomRoutine;
+
     public bool zoomPressed = false;
-
-    private InputManager input;
-
     private float time;
     private bool canFire = false;
 
     void Start()
     {
+        playerCamera = Camera.main;
+
         input = InputManager.Instance;
         defaultFOV = playerCamera.fieldOfView;
 
-        gun.transform.position = defaultPos.position;
-        gun.transform.rotation = defaultPos.rotation;
+        transform.localPosition = weaponSO.defaultPos.position;
+        transform.localRotation = weaponSO.defaultPos.rotation;
+        transform.localScale = weaponSO.defaultPos.localScale;
     }
 
     void Update()
     {
         FireRateHandle();
-        if (input.PlayerShootThisFrame() && canFire)       
+        if (input.PlayerShootThisFrame() && canFire)
             Shoot();
 
-        if (canZoom)
+        if (weaponSO.canZoom)
             HandleZoom();
     }
 
@@ -60,30 +44,33 @@ public class GunControl : MonoBehaviour
     {
         time += Time.deltaTime;
 
-        float nextTimeToFire = 1 / fireRate;
+        float nextTimeToFire = 1 / weaponSO.fireRate;
 
         if (time >= nextTimeToFire)
         {
             canFire = true;
             time = 0;
         }
-        else canFire = false; 
+        else canFire = false;
     }
 
     private void Shoot()
     {
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, weaponSO.range))
         {
             Debug.LogWarning($"Hit {hit.collider.name}");
         }
 
-        muzzleFlash.Play();
+        if (weaponSO.muzzleFlash != null)
+        {
+            weaponSO.muzzleFlash.Play();
+        }
     }
 
     private void HandleZoom()
     {
-        if (!HoldToZoom)
+        if (!weaponSO.HoldToZoom)
         {
             if (isAiming)
             {
@@ -135,19 +122,19 @@ public class GunControl : MonoBehaviour
 
     private IEnumerator ToggleZoom(bool IsEnter)
     {
-        Vector3 targetPos = IsEnter ? AimPos.localPosition : defaultPos.localPosition;
-        Quaternion targetRot = IsEnter ? AimPos.localRotation : defaultPos.localRotation;
+        Vector3 targetPos = IsEnter ? weaponSO.AimPos.localPosition : weaponSO.defaultPos.localPosition;
+        Quaternion targetRot = IsEnter ? weaponSO.AimPos.localRotation : weaponSO.defaultPos.localRotation;
 
-        float targetFOV = IsEnter ? zoomFOV : defaultFOV;
+        float targetFOV = IsEnter ? weaponSO.zoomFOV : defaultFOV;
         float startingFOV = playerCamera.fieldOfView;
         float timeElapsed = 0;
 
-        while (timeElapsed < timeToZoom)
+        while (timeElapsed < weaponSO.timeToZoom)
         {
-            gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, targetPos, timeElapsed / timeToZoom);
-            gun.transform.localRotation = Quaternion.Lerp(gun.transform.localRotation, targetRot, timeElapsed / timeToZoom);
+            weaponSO.gun.transform.localPosition = Vector3.Lerp(weaponSO.gun.transform.localPosition, targetPos, timeElapsed / weaponSO.timeToZoom);
+            weaponSO.gun.transform.localRotation = Quaternion.Lerp(weaponSO.gun.transform.localRotation, targetRot, timeElapsed / weaponSO.timeToZoom);
 
-            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed / timeToZoom);
+            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed / weaponSO.timeToZoom);
 
             timeElapsed += Time.deltaTime;
             yield return null;

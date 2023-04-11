@@ -19,6 +19,8 @@ public static class PlayerSettings
         public float minCameraRotationX;
         public float maxCameraRotationX;
 
+        public float clampAngle = 80f;
+
         [Header("Movement Settings")]
         public float WalkingFowardSpeed;
         public float WalkingStrafeSpeed;

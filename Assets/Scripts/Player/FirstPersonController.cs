@@ -79,10 +79,15 @@ public class FirstPersonController : MonoBehaviour
 
     private void Awake()
     {
-        input = InputManager.Instance;
         characterController = GetComponent<CharacterController>();
         playerCamera = GetComponentInChildren<Camera>();
         defaultYPos = playerCamera.transform.localPosition.y;
+    }
+
+    private void Start()
+    {
+        input = InputManager.Instance;
+            
     }
 
     private void Update()

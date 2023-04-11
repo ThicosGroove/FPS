@@ -1,9 +1,10 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static PlayerSettings;
 
-public class MouseLook : MonoBehaviour
+public class MouseLook : CinemachineExtension
 {
     [Header("References")]
     public Transform playerBody;
@@ -12,48 +13,41 @@ public class MouseLook : MonoBehaviour
     [SerializeField] private Vector2 input_View;
     [SerializeField] private PlayerSettingsModel playerSettings;
 
-    private InputControl input;
+    private Vector3 startingRotation;
+
+    private InputManager input;
 
     private float RotationX = 0f;
 
-    private void Awake()
-    {
-        input = new InputControl();
-        input.Character.View.performed += ctx => input_View = ctx.ReadValue<Vector2>();
-    }
-
-    private void OnEnable()
-    {
-        input.Enable();
-    }
-
-    private void OnDisable()
-    {
-        input.Disable();
-    }
-
     private void Start()
     {
+        playerSettings = new PlayerSettingsModel();
         Cursor.lockState = CursorLockMode.Locked;
+        input = InputManager.Instance;
     }
 
-    void Update()
+    protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
     {
-        ViewControl();
+        if (vcam.Follow)
+        {
+            if (stage == CinemachineCore.Stage.Aim)
+            {
+                if (startingRotation == null) startingRotation = transform.localRotation.eulerAngles;
+                Vector2 deltaInput = input.GetPlayerMouseMovement();
+                startingRotation.x += deltaInput.x * playerSettings.ViewSensitivityX * ViewControl().x * Time.deltaTime;
+                startingRotation.y += deltaInput.y * playerSettings.ViewSensitivityY * ViewControl().y * Time.deltaTime;
+                startingRotation.y = Mathf.Clamp(startingRotation.y, -playerSettings.clampAngle, playerSettings.clampAngle);
+
+                state.RawOrientation = Quaternion.Euler(startingRotation.y, startingRotation.x, 0);
+            }
+        }
+
     }
 
-    void ViewControl()
+    Vector2 ViewControl()
     {
         input_View.x = playerSettings.ViewIntertedX ? -input_View.x : input_View.x;
         input_View.y = playerSettings.ViewIntertedY ? input_View.y : -input_View.y;
-
-        float mouseX = input_View.x * playerSettings.ViewSensitivityX * Time.deltaTime;
-        float mouseY = input_View.y * playerSettings.ViewSensitivityY * Time.deltaTime;
-
-        RotationX += mouseY;
-        RotationX = Mathf.Clamp(RotationX, playerSettings.minCameraRotationX, playerSettings.maxCameraRotationX);
-
-        transform.localRotation = Quaternion.Euler(RotationX, 0f, 0f);
-        playerBody.Rotate(Vector3.up * mouseX);
+        return input_View;
     }
 }
