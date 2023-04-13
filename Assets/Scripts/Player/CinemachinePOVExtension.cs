@@ -11,13 +11,29 @@ public class CinemachinePOVExtension : CinemachineExtension
 
     private InputManager input;
     private Vector3 startingRotation;
+    private Camera mainCamera;
+    private Camera myCamera;
 
     protected override void Awake()
     {
         input = InputManager.Instance;
+        mainCamera = Camera.main;
+
         base.Awake();
 
     }
+
+    private void Start()
+    {
+        Cursor.visible = false;
+    }
+
+    private void Update()
+    {
+        transform.position = mainCamera.transform.position;
+        transform.rotation = mainCamera.transform.rotation;
+    }
+
 
     protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
     {
