@@ -80,7 +80,7 @@ public class FirstPersonController : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        playerCamera = GetComponentInChildren<Camera>();
+        playerCamera = Camera.main;
         defaultYPos = playerCamera.transform.localPosition.y;
     }
 
