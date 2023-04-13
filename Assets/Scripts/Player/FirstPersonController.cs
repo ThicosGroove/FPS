@@ -115,7 +115,7 @@ public class FirstPersonController : MonoBehaviour
         currentInput = new Vector2((isCrouching ? crouchSpeed : isAiming? walkSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.x, (isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.y);
 
         float moveDirectionY = moveDirection.y;
-        moveDirection = transform.TransformDirection(Vector3.right) * currentInput.x + transform.TransformDirection(Vector3.forward).normalized * currentInput.y;
+        moveDirection = playerCamera.transform.TransformDirection(Vector3.right) * currentInput.x + playerCamera.transform.TransformDirection(Vector3.forward).normalized * currentInput.y;
 
         moveDirection.y = moveDirectionY;
     }
