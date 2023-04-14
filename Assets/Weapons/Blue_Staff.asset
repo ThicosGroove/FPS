@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2e71209d62921449bed0b907484c977, type: 3}
+  m_Name: Blue_Staff
+  m_EditorClassIdentifier: 
+  WeaponPrefab: {fileID: 6859842178193715958, guid: 1524d61ea37d8784b84148462bc3d982, type: 3}
+  Name: Green Staff
+  Type: 1
+  SpawnPoint: {x: 0.338, y: -0.417, z: 0.183}
+  SpawnRotation: {x: -48.333, y: 0, z: 0}
+  ShootConfig: {fileID: 11400000, guid: 75a28aad356eb9f48931a4785970b034, type: 2}
+  TrailConfig: {fileID: 11400000, guid: ef6640400c916724ea935af7e99e4a3f, type: 2}

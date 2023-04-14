@@ -36,14 +36,16 @@ public class GunRecoil : MonoBehaviour
         transform.localRotation = Quaternion.Euler(currentRotation);
 
         if (input.PlayerShootThisFrame())
-            RecoilFire();
+        {
+            //RecoilFire();
+        }
     }
 
-    private void RecoilFire()
-    {
-        if (gunControl.zoomPressed)
-            targetRotation += new Vector3(aimRecoilX, Random.Range(-aimRecoilY, aimRecoilY), Random.Range(-aimRecoilZ, aimRecoilZ));
-        else
-            targetRotation += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
-    }
+    //private void RecoilFire()
+    //{
+    //    if (gunControl.zoomPressed)
+    //        targetRotation += new Vector3(aimRecoilX, Random.Range(-aimRecoilY, aimRecoilY), Random.Range(-aimRecoilZ, aimRecoilZ));
+    //    else
+    //        targetRotation += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
+    //}
 }
