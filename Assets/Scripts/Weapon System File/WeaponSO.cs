@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.Pool;
 using System.Collections;
 
-
 // Weapon System copied from https://www.youtube.com/watch?v=E-vIMamyORg&t=309s
 [CreateAssetMenu(fileName ="Weapon", menuName = "Weapons/New Weapon", order = 1)]
 public class WeaponSO : ScriptableObject
@@ -22,6 +21,17 @@ public class WeaponSO : ScriptableObject
     private ParticleSystem ShootParticle;
     private ObjectPool<TrailRenderer> TrailPool;
 
+    public void SwitchOut()
+    {
+        TrailPool.Clear();
+        Model.gameObject.SetActive(false);
+    }
+
+    public void SwitchIn()
+    {
+        Model.gameObject.SetActive(true);
+    }
+
     public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour)
     {
         this.ActiveMonoBehaviour = ActiveMonoBehaviour;
@@ -36,6 +46,11 @@ public class WeaponSO : ScriptableObject
         ShootParticle = Model.GetComponentInChildren<ParticleSystem>();
     }
 
+    private Transform CameraPosition()
+    {
+        return Model.GetComponentInParent<Camera>().transform;
+    }
+
     public void Shoot()
     {
         if (Time.time > ShootConfig.FireRate + LastShootTime)
@@ -43,7 +58,7 @@ public class WeaponSO : ScriptableObject
             LastShootTime = Time.time;
             ShootParticle.Play();
 
-            Vector3 shootDirection = ShootParticle.transform.forward
+            Vector3 shootDirection = CameraPosition().forward
                 + new Vector3(
                     Random.Range(
                         -ShootConfig.Spread.x,
@@ -70,6 +85,8 @@ public class WeaponSO : ScriptableObject
                         ShootParticle.transform.position,
                         hit.point,
                         hit));
+
+                Debug.LogWarning(hit.transform.gameObject.name);
             }
             else
             {
@@ -78,10 +95,11 @@ public class WeaponSO : ScriptableObject
                         ShootParticle.transform.position,
                         ShootParticle.transform.position + (shootDirection * TrailConfig.MissDistance),
                         new RaycastHit()));
-
             }
         }
     }
+
+
 
     private IEnumerator PlayTrail(Vector3 StartPoint, Vector3 EndPoint, RaycastHit Hit)
     {

@@ -12,7 +12,6 @@ public class CinemachinePOVExtension : CinemachineExtension
     private InputManager input;
     private Vector3 startingRotation;
     private Camera mainCamera;
-    private Camera myCamera;
 
     protected override void Awake()
     {

@@ -85,6 +85,11 @@ public class InputManager : MonoBehaviour
         return shoot > 0 ? true : false;
     }
 
+    public bool PlayerChangeWeapon()
+    {
+        return input.Character.ChangeWeapon.triggered;
+    }
+
     #endregion
 
     #region System Input

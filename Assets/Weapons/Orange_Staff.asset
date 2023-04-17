@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2e71209d62921449bed0b907484c977, type: 3}
-  m_Name: Blue_Staff
+  m_Name: Orange_Staff
   m_EditorClassIdentifier: 
-  WeaponPrefab: {fileID: 6859842178193715958, guid: 1524d61ea37d8784b84148462bc3d982, type: 3}
-  Name: Blue Staff
-  Type: 0
+  WeaponPrefab: {fileID: 6917659481326538864, guid: 790325c4a3988a747918ffe93463ade7, type: 3}
+  Name: Orange Staff
+  Type: 4
   SpawnPoint: {x: 0.338, y: -0.417, z: 0.183}
   SpawnRotation: {x: -48.333, y: 0, z: 0}
-  ShootConfig: {fileID: 11400000, guid: 75a28aad356eb9f48931a4785970b034, type: 2}
-  TrailConfig: {fileID: 11400000, guid: ef6640400c916724ea935af7e99e4a3f, type: 2}
+  ShootConfig: {fileID: 11400000, guid: 40f6d74642f7f3b4d865bde5f834d0bb, type: 2}
+  TrailConfig: {fileID: 11400000, guid: d6091ffc69b6f794fa532923e992756c, type: 2}

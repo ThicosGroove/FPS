@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05512098169baba4b9e3209fc314c08e, type: 3}
-  m_Name: Green_Staff_Trail_Config
+  m_Name: Yellow_Staff_Trail_Config
   m_EditorClassIdentifier: 
-  Material: {fileID: 2100000, guid: b9e2a0c203469b14f9bfa5f7ec248ff5, type: 2}
+  Material: {fileID: 2100000, guid: ae6416d5e724e384f90b880c7eb7e8aa, type: 2}
   WidthCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0.5
-      inSlope: -0.47027755
-      outSlope: -0.47027755
+      inSlope: -0.5
+      outSlope: -0.5
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.0632019
+      time: 1
       value: 0
-      inSlope: -0.47027755
-      outSlope: -0.47027755
+      inSlope: -0.5
+      outSlope: -0.5
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

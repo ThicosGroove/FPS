@@ -13,6 +13,8 @@ public class PlayerWeaponAction : MonoBehaviour
     void Start()
     {
         input = InputManager.Instance;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
