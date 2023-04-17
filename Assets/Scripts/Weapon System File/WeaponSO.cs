@@ -23,7 +23,6 @@ public class WeaponSO : ScriptableObject
 
     public void SwitchOut()
     {
-        TrailPool.Clear();
         Model.gameObject.SetActive(false);
     }
 

@@ -54,6 +54,7 @@ public class PlayerWeaponSelector : MonoBehaviour
 
             if (GetWeapon(WeaponsList[currentWeaponIndex]))
             {
+                //currentWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>().PlaySwithOutAnim();
                 currentWeapon.SwitchOut();
                 ActiveWeapon = WeaponsList[currentWeaponIndex];
                 currentWeapon = ActiveWeapon;
@@ -62,6 +63,7 @@ public class PlayerWeaponSelector : MonoBehaviour
             }
             else
             {
+                //currentWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>().PlaySwithOutAnim();
                 currentWeapon.SwitchOut();
                 ActiveWeapon = WeaponsList[currentWeaponIndex];
                 ActiveWeapon.Spawn(WeaponParent, this);
@@ -75,9 +77,9 @@ public class PlayerWeaponSelector : MonoBehaviour
 
     private bool GetWeapon(WeaponSO searchType)
     {
-        if (WeaponCreated.ContainsValue(searchType.Type) && WeaponCreated.ContainsKey(searchType.Name))        
+        if (WeaponCreated.ContainsValue(searchType.Type) && WeaponCreated.ContainsKey(searchType.Name))
             return true;
-        
+
         return false;
     }
 }
