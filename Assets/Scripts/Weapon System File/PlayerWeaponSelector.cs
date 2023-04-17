@@ -15,6 +15,7 @@ public class PlayerWeaponSelector : MonoBehaviour
     [Header("Runtime Filled")]
     public WeaponSO ActiveWeapon;
 
+    private WeaponBehaviour myWeapon;
     private InputManager input;
     private WeaponSO currentWeapon;
     private int currentWeaponIndex = 0;
@@ -34,9 +35,8 @@ public class PlayerWeaponSelector : MonoBehaviour
         WeaponCreated.Add(currentWeapon.Name, currentWeapon.Type);
 
         ActiveWeapon = currentWeapon;
-        currentWeapon.Spawn(WeaponParent, this);
-
-        Debug.LogWarning(WeaponsList.Count);
+        myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
+        myWeapon.Spawn(WeaponParent, this);
     }
 
     private void Update()
@@ -50,26 +50,24 @@ public class PlayerWeaponSelector : MonoBehaviour
                 currentWeaponIndex = 0;
             }
 
-
-
             if (GetWeapon(WeaponsList[currentWeaponIndex]))
             {
-                //currentWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>().PlaySwithOutAnim();
-                currentWeapon.SwitchOut();
+                StartCoroutine(myWeapon.SwitchOut());
                 ActiveWeapon = WeaponsList[currentWeaponIndex];
                 currentWeapon = ActiveWeapon;
-                currentWeapon.SwitchIn();
+                myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
+                StartCoroutine(myWeapon.SwitchIn());
 
             }
             else
             {
-                //currentWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>().PlaySwithOutAnim();
-                currentWeapon.SwitchOut();
+                StartCoroutine(myWeapon.SwitchOut());
                 ActiveWeapon = WeaponsList[currentWeaponIndex];
-                ActiveWeapon.Spawn(WeaponParent, this);
+                myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
+                myWeapon.Spawn(WeaponParent, this);
                 currentWeapon = ActiveWeapon;
                 WeaponCreated.Add(currentWeapon.Name, currentWeapon.Type);
-                currentWeapon.SwitchIn();
+                StartCoroutine(myWeapon.SwitchIn());
 
             }
         }

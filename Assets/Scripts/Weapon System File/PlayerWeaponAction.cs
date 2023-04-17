@@ -7,6 +7,8 @@ public class PlayerWeaponAction : MonoBehaviour
 {
     [SerializeField] private PlayerWeaponSelector WeaponSelector;
 
+    private WeaponBehaviour myWeapon;
+
     InputManager input;
 
     // Start is called before the first frame update
@@ -20,9 +22,13 @@ public class PlayerWeaponAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (input.PlayerShootThisFrame() && WeaponSelector.ActiveWeapon != null)
+        if (WeaponSelector.ActiveWeapon == null) return;
+        
+        myWeapon = WeaponSelector.ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
+
+        if (input.PlayerShootThisFrame())
         {
-            WeaponSelector.ActiveWeapon.Shoot();
+            myWeapon.Shoot();
         }
     }
 }
