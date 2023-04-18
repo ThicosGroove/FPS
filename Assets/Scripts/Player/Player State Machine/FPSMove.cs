@@ -10,7 +10,7 @@ public class FPSMove : MonoBehaviour
 
     private bool ShouldDash => input.GetPlayerDashThisFrame();
     private bool ShouldJump => input.GetPlayerJumpThisFrame();
-    private bool ShouldCrouch => input.GetPlayerCrouch(); 
+    private bool ShouldCrouch => input.GetPlayerCrouch();
     private bool isAiming => input.GetPlayerAim();
 
     private Vector3 playerVelocity;
@@ -41,11 +41,9 @@ public class FPSMove : MonoBehaviour
 
     void Update()
     {
+        HandleGravity();
+
         groundedPlayer = ChechingGround();
-        if (groundedPlayer && playerVelocity.y < 0)
-        {
-            playerVelocity.y = 0f;
-        }
 
         HandleMovement();
 
@@ -60,9 +58,7 @@ public class FPSMove : MonoBehaviour
         moveDir = new Vector3(movement.x, 0, movement.y).normalized;
         moveDir = camTransform.forward * moveDir.z + camTransform.right * moveDir.x;
 
-        playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(moveDir * Time.deltaTime * playerSpeed);
-        controller.Move(playerVelocity * Time.deltaTime);
     }
 
     private void HandleJump()
@@ -78,9 +74,18 @@ public class FPSMove : MonoBehaviour
         bool ray1 = Physics.CheckSphere(groundCheckPos1.position, .1f, groundMask);
         bool ray2 = Physics.CheckSphere(groundCheckPos2.position, .1f, groundMask);
 
-        if (ray1 || ray2)        
-            return true;       
+        if (ray1 || ray2)
+            return true;
         else return false;
+    }
+
+    private void HandleGravity()
+    {
+        if (groundedPlayer && playerVelocity.y < 0)
+            playerVelocity.y = 0f;
+
+        playerVelocity.y += gravityValue * Time.deltaTime;
+        controller.Move(playerVelocity * Time.deltaTime);
     }
 
     private void HandleDash()
