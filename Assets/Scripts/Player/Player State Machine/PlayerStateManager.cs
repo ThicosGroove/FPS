@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 public class PlayerStateManager : MonoBehaviour
-{   
+{
     private CharacterController _characterController;
     private Camera playerCamera;
 
@@ -61,12 +61,12 @@ public class PlayerStateManager : MonoBehaviour
     //private bool _shouldCrouch => input.GetPlayerCrouch() && _characterController.isGrounded && !duringCrouchAnimation;
     //private bool _isAiming => input.GetPlayerAim();
 
-    [SerializeField]private bool _isMoving;
-    [SerializeField]private bool _isSprinting;
-    [SerializeField]private bool _shouldJump;
-    [SerializeField]private bool _shouldCrouch;
-    [SerializeField]private bool _isAiming;
-    [SerializeField]private Vector2 _currentInput;
+    [SerializeField] private bool _isMoving;
+    [SerializeField] private bool _isSprinting;
+    [SerializeField] private bool _shouldJump;
+    [SerializeField] private bool _shouldCrouch;
+    [SerializeField] private bool _isAiming;
+    [SerializeField] private Vector2 _currentInput;
 
     //Getters and Setters
     public CharacterController CharacterController { get { return _characterController; } }
@@ -137,7 +137,7 @@ public class PlayerStateManager : MonoBehaviour
         _currentInput = input.GetPlayerMovement().normalized;
         _shouldJump = input.GetPlayerJumpThisFrame();
         _isMoving = input.IsPlayerMoving();
-        _isSprinting = input.GetPlayerSprint();
+        _isSprinting = input.GetPlayerDashThisFrame();
         _shouldCrouch = input.GetPlayerCrouch();
         _isAiming = input.GetPlayerAim();
     }
@@ -148,8 +148,8 @@ public class PlayerStateManager : MonoBehaviour
 
     void HandleGravity()
     {
-        
-         _moveDirection.y -= _jumpGravity * Time.deltaTime;
+
+        _moveDirection.y -= _jumpGravity * Time.deltaTime;
 
         //MoveDirectionY -= Gravity * Time.deltaTime;
         //_moveDirection.y = MoveDirectionY;
@@ -162,7 +162,7 @@ public class PlayerStateManager : MonoBehaviour
         _currentInput = new Vector2((isCrouching ? _crouchSpeed : _isSprinting ? _sprintSpeed : _walkSpeed) * dir.x, (isCrouching ? _crouchSpeed : _isSprinting ? _sprintSpeed : _walkSpeed) * dir.y);
 
         float moveDirectionY = _moveDirection.y;
-         _moveDirection = transform.TransformDirection(Vector3.right) * _currentInput.x + transform.TransformDirection(Vector3.forward).normalized * _currentInput.y;
+        _moveDirection = transform.TransformDirection(Vector3.right) * _currentInput.x + transform.TransformDirection(Vector3.forward).normalized * _currentInput.y;
         _characterController.Move(_moveDirection * Time.deltaTime);
 
         _moveDirection.y = moveDirectionY;

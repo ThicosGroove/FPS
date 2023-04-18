@@ -19,7 +19,7 @@ MonoBehaviour:
   SpawnRotation: {x: -48.333, y: 0, z: 0}
   ShootConfig: {fileID: 11400000, guid: 40f6d74642f7f3b4d865bde5f834d0bb, type: 2}
   TrailConfig: {fileID: 11400000, guid: d6091ffc69b6f794fa532923e992756c, type: 2}
-  timeToSwitchIn: 0.3
+  timeToSwitchIn: 0.2
   timeToSwitchOut: 0.3
   ActiveMonoBehaviour: {fileID: 0}
   Model: {fileID: 0}

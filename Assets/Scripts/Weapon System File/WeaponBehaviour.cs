@@ -23,7 +23,7 @@ public class WeaponBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (input.PlayerChangeWeapon())
+        if (input.PlayerChangeWeaponNext())
         {
             PlaySwithOutAnim();
         }
@@ -35,17 +35,18 @@ public class WeaponBehaviour : MonoBehaviour
     }
 
 
-    public IEnumerator SwitchOut()
+    public IEnumerator SwitchIn()
     {
         yield return new WaitForSeconds(myWeapon.timeToSwitchIn);
+        myWeapon.Model.gameObject.SetActive(true);
+    }
+
+    public IEnumerator SwitchOut()
+    {
+        yield return new WaitForSeconds(myWeapon.timeToSwitchOut);
         myWeapon.Model.gameObject.SetActive(false);
     }
 
-    public IEnumerator SwitchIn()
-    {
-        yield return new WaitForSeconds(myWeapon.timeToSwitchOut);
-        myWeapon.Model.gameObject.SetActive(true);
-    }
 
     public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour)
     {

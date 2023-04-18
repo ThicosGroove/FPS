@@ -37,13 +37,13 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Sprint"",
-                    ""type"": ""Value"",
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
                     ""id"": ""5959b505-7ad7-4199-85a8-4666cf47ed2d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": true
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Crouch"",
@@ -91,7 +91,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Change Weapon"",
+                    ""name"": ""Change Weapon Next"",
                     ""type"": ""Button"",
                     ""id"": ""64e369c1-e8c8-4047-9fa4-32dbd2f551ce"",
                     ""expectedControlType"": ""Button"",
@@ -284,7 +284,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Sprint"",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -295,7 +295,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Sprint"",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -345,23 +345,23 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""e0195cb2-e675-41b7-9149-300583c53b63"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Change Weapon"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""a711dc41-ed28-4a3b-8603-bcaf5993a255"",
                     ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Change Weapon"",
+                    ""action"": ""Change Weapon Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72da0c44-f29d-43e8-8909-791844d07896"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change Weapon Next"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -412,13 +412,13 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         // Character
         m_Character = asset.FindActionMap("Character", throwIfNotFound: true);
         m_Character_Movement = m_Character.FindAction("Movement", throwIfNotFound: true);
-        m_Character_Sprint = m_Character.FindAction("Sprint", throwIfNotFound: true);
+        m_Character_Dash = m_Character.FindAction("Dash", throwIfNotFound: true);
         m_Character_Crouch = m_Character.FindAction("Crouch", throwIfNotFound: true);
         m_Character_View = m_Character.FindAction("View", throwIfNotFound: true);
         m_Character_Jump = m_Character.FindAction("Jump", throwIfNotFound: true);
         m_Character_Shoot = m_Character.FindAction("Shoot", throwIfNotFound: true);
         m_Character_Aim = m_Character.FindAction("Aim", throwIfNotFound: true);
-        m_Character_ChangeWeapon = m_Character.FindAction("Change Weapon", throwIfNotFound: true);
+        m_Character_ChangeWeaponNext = m_Character.FindAction("Change Weapon Next", throwIfNotFound: true);
         // System
         m_System = asset.FindActionMap("System", throwIfNotFound: true);
         m_System_Pause = m_System.FindAction("Pause", throwIfNotFound: true);
@@ -484,25 +484,25 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Character;
     private List<ICharacterActions> m_CharacterActionsCallbackInterfaces = new List<ICharacterActions>();
     private readonly InputAction m_Character_Movement;
-    private readonly InputAction m_Character_Sprint;
+    private readonly InputAction m_Character_Dash;
     private readonly InputAction m_Character_Crouch;
     private readonly InputAction m_Character_View;
     private readonly InputAction m_Character_Jump;
     private readonly InputAction m_Character_Shoot;
     private readonly InputAction m_Character_Aim;
-    private readonly InputAction m_Character_ChangeWeapon;
+    private readonly InputAction m_Character_ChangeWeaponNext;
     public struct CharacterActions
     {
         private @InputControl m_Wrapper;
         public CharacterActions(@InputControl wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Character_Movement;
-        public InputAction @Sprint => m_Wrapper.m_Character_Sprint;
+        public InputAction @Dash => m_Wrapper.m_Character_Dash;
         public InputAction @Crouch => m_Wrapper.m_Character_Crouch;
         public InputAction @View => m_Wrapper.m_Character_View;
         public InputAction @Jump => m_Wrapper.m_Character_Jump;
         public InputAction @Shoot => m_Wrapper.m_Character_Shoot;
         public InputAction @Aim => m_Wrapper.m_Character_Aim;
-        public InputAction @ChangeWeapon => m_Wrapper.m_Character_ChangeWeapon;
+        public InputAction @ChangeWeaponNext => m_Wrapper.m_Character_ChangeWeaponNext;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -515,9 +515,9 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
-            @Sprint.started += instance.OnSprint;
-            @Sprint.performed += instance.OnSprint;
-            @Sprint.canceled += instance.OnSprint;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
             @Crouch.started += instance.OnCrouch;
             @Crouch.performed += instance.OnCrouch;
             @Crouch.canceled += instance.OnCrouch;
@@ -533,9 +533,9 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
-            @ChangeWeapon.started += instance.OnChangeWeapon;
-            @ChangeWeapon.performed += instance.OnChangeWeapon;
-            @ChangeWeapon.canceled += instance.OnChangeWeapon;
+            @ChangeWeaponNext.started += instance.OnChangeWeaponNext;
+            @ChangeWeaponNext.performed += instance.OnChangeWeaponNext;
+            @ChangeWeaponNext.canceled += instance.OnChangeWeaponNext;
         }
 
         private void UnregisterCallbacks(ICharacterActions instance)
@@ -543,9 +543,9 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
-            @Sprint.started -= instance.OnSprint;
-            @Sprint.performed -= instance.OnSprint;
-            @Sprint.canceled -= instance.OnSprint;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
             @Crouch.started -= instance.OnCrouch;
             @Crouch.performed -= instance.OnCrouch;
             @Crouch.canceled -= instance.OnCrouch;
@@ -561,9 +561,9 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
-            @ChangeWeapon.started -= instance.OnChangeWeapon;
-            @ChangeWeapon.performed -= instance.OnChangeWeapon;
-            @ChangeWeapon.canceled -= instance.OnChangeWeapon;
+            @ChangeWeaponNext.started -= instance.OnChangeWeaponNext;
+            @ChangeWeaponNext.performed -= instance.OnChangeWeaponNext;
+            @ChangeWeaponNext.canceled -= instance.OnChangeWeaponNext;
         }
 
         public void RemoveCallbacks(ICharacterActions instance)
@@ -630,13 +630,13 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
     public interface ICharacterActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnSprint(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnView(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
-        void OnChangeWeapon(InputAction.CallbackContext context);
+        void OnChangeWeaponNext(InputAction.CallbackContext context);
     }
     public interface ISystemActions
     {

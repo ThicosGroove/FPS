@@ -58,10 +58,9 @@ public class InputManager : MonoBehaviour
         return input.Character.View.ReadValue<Vector2>();
     }
 
-    public bool GetPlayerSprint()
+    public bool GetPlayerDashThisFrame()
     {
-        float sprint = input.Character.Sprint.ReadValue<float>();
-        return sprint > 0 ? true : false;
+        return input.Character.Dash.triggered;     
     }
 
     public bool GetPlayerJumpThisFrame()
@@ -85,10 +84,11 @@ public class InputManager : MonoBehaviour
         return shoot > 0 ? true : false;
     }
 
-    public bool PlayerChangeWeapon()
+    public bool PlayerChangeWeaponNext()
     {
-        return input.Character.ChangeWeapon.triggered;
+        return input.Character.ChangeWeaponNext.triggered;
     }
+
 
     #endregion
 

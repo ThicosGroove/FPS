@@ -5,13 +5,13 @@ using UnityEngine;
 public class FirstPersonController : MonoBehaviour
 {
     public bool CanMove { get; private set; } = true;
-    private bool IsSprinting => input.GetPlayerSprint() && canSprint;
+    private bool ShouldDash => input.GetPlayerDashThisFrame() && canDash;
     private bool ShouldJump => input.GetPlayerJumpThisFrame() && characterController.isGrounded;
     private bool ShouldCrouch => input.GetPlayerCrouch() && characterController.isGrounded && !duringCrouchAnimation;
     private bool isAiming => input.GetPlayerAim();
 
     [Header("Fucnitonal Options")]
-    [SerializeField] private bool canSprint = true;
+    [SerializeField] private bool canDash = true;
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;
     [SerializeField] private bool canUseHeadBob = true;
@@ -23,13 +23,18 @@ public class FirstPersonController : MonoBehaviour
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 5f;
-    [SerializeField] private float sprintSpeed = 10f;
+    [SerializeField] private float dashSpeed = 10f;
     [SerializeField] private float crouchSpeed = 2.5f;
     [SerializeField] private float slopeSpeed = 8f;
 
     [Header("Jumping Parameters")]
     [SerializeField] private float jumpForce = 8f;
     [SerializeField] private float gravity = 30f;
+
+
+    [Header("Dash Parameters")]
+    [SerializeField] private float timeToDash = 2f;
+    private bool IsDashing;
 
     [Header("Crouch Parameters")]
     [SerializeField] private float crouchHeight = 0.5f;
@@ -87,7 +92,7 @@ public class FirstPersonController : MonoBehaviour
     private void Start()
     {
         input = InputManager.Instance;
-            
+
     }
 
     private void Update()
@@ -104,7 +109,10 @@ public class FirstPersonController : MonoBehaviour
 
             if (canUseHeadBob)
                 HandleHeadBob();
-            
+
+            if (canDash)
+                HandleDash();
+
             ApplyFinalMovements();
         }
     }
@@ -112,7 +120,7 @@ public class FirstPersonController : MonoBehaviour
     private void HandleMovementInput()
     {
         Vector3 dir = input.GetPlayerMovement().normalized;
-        currentInput = new Vector2((isCrouching ? crouchSpeed : isAiming? walkSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.x, (isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * dir.y);
+        currentInput = new Vector2((isCrouching ? crouchSpeed : isAiming ? walkSpeed : walkSpeed) * dir.x, (isCrouching ? crouchSpeed : walkSpeed) * dir.y);
 
         float moveDirectionY = moveDirection.y;
         moveDirection = playerCamera.transform.TransformDirection(Vector3.right) * currentInput.x + playerCamera.transform.TransformDirection(Vector3.forward).normalized * currentInput.y;
@@ -130,31 +138,6 @@ public class FirstPersonController : MonoBehaviour
     {
         if (ShouldCrouch)
             StartCoroutine(CrouchStand());
-    }
-
-    private void HandleHeadBob()
-    {
-        if (!characterController.isGrounded) return;
-
-        if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
-        {
-            timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
-            playerCamera.transform.localPosition = new Vector3(
-                playerCamera.transform.localPosition.x,
-                defaultYPos + Mathf.Sin(timer) * (isCrouching ? crouchBobAmount : IsSprinting ? sprintBobAmount : walkBobAmount),
-                playerCamera.transform.localPosition.z);
-        }
-    }   
-
-    private void ApplyFinalMovements()
-    {
-        if (!characterController.isGrounded)
-            moveDirection.y -= gravity * Time.deltaTime;
-
-        if (WillSlideOnSlopes && IsSliding)
-            moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
-
-        characterController.Move(moveDirection * Time.deltaTime);
     }
 
     private IEnumerator CrouchStand()
@@ -186,5 +169,62 @@ public class FirstPersonController : MonoBehaviour
         duringCrouchAnimation = false;
     }
 
- 
+    private void HandleHeadBob()
+    {
+        if (!characterController.isGrounded) return;
+
+        if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
+        {
+            timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : walkBobSpeed);
+            playerCamera.transform.localPosition = new Vector3(
+                playerCamera.transform.localPosition.x,
+                defaultYPos + Mathf.Sin(timer) * (isCrouching ? crouchBobAmount : walkBobAmount),
+                playerCamera.transform.localPosition.z);
+        }
+    }
+
+   
+    private void HandleDash()
+    {
+        if (ShouldDash)
+        {
+            StartCoroutine(Dash());
+        }
+    }
+
+    private IEnumerator Dash()
+    {
+
+        float timeElapsed = 0;
+
+        while (timeElapsed < timeToDash)
+        {
+            Debug.LogWarning("DASH");
+            timeElapsed += Time.deltaTime;
+            IsDashing = true;
+            //moveDirection.x *= dashSpeed;
+            //moveDirection.z *= dashSpeed;
+            moveDirection *= dashSpeed;
+            yield return null;
+        }
+
+        IsDashing = false;
+    }
+
+    private void ApplyFinalMovements()
+    {
+        if (!characterController.isGrounded)
+            moveDirection.y -= gravity * Time.deltaTime;
+
+        if (WillSlideOnSlopes && IsSliding)
+            moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
+
+        if (IsDashing)
+        {
+            
+        }
+
+        characterController.Move(moveDirection * Time.deltaTime);
+    }
+
 }
