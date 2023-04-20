@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
             _instance = this;
         }
 
-
+        //base.Awake();
         input = new InputControl();
     }
 
@@ -48,7 +48,7 @@ public class InputManager : MonoBehaviour
     {
         Vector2 newInput = input.Character.Movement.ReadValue<Vector2>();
 
-        if (Mathf.Abs(newInput.x) > Mathf.Epsilon || Mathf.Abs( newInput.y) > Mathf.Epsilon) return true;
+        if (Mathf.Abs(newInput.x) > Mathf.Epsilon || Mathf.Abs(newInput.y) > Mathf.Epsilon) return true;
 
         else return false;
     }
@@ -60,7 +60,7 @@ public class InputManager : MonoBehaviour
 
     public bool GetPlayerDashThisFrame()
     {
-        return input.Character.Dash.triggered;     
+        return input.Character.Dash.triggered;
     }
 
     public bool GetPlayerJumpThisFrame()

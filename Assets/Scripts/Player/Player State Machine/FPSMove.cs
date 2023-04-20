@@ -63,7 +63,7 @@ public class FPSMove : MonoBehaviour
 
     private void HandleJump()
     {
-        if (input.GetPlayerJumpThisFrame() && groundedPlayer)
+        if (ShouldJump && groundedPlayer)
         {
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
         }
@@ -90,7 +90,7 @@ public class FPSMove : MonoBehaviour
 
     private void HandleDash()
     {
-        if (input.GetPlayerDashThisFrame())
+        if (ShouldDash)
         {
             StartCoroutine(Dash());
         }
