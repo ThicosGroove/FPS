@@ -4932,3 +4932,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myWeapon: {fileID: 11400000, guid: 00614ca57756f5b42a099b2f4208fbb2, type: 2}
+  damageDealt: 50

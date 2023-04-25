@@ -12,7 +12,7 @@ public class WeaponBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        
+
     }
 
     private void Start()
@@ -103,6 +103,14 @@ public class WeaponBehaviour : MonoBehaviour
                         hit));
 
                 Debug.LogWarning(hit.transform.gameObject.name);
+
+                AEnemy enemy = hit.transform.gameObject.GetComponent<AEnemy>();
+
+                if (enemy != null)
+                {
+                    enemy.LostHealth(myWeapon.WeaponBaseDamage);
+                }
+
             }
             else
             {
@@ -114,7 +122,6 @@ public class WeaponBehaviour : MonoBehaviour
             }
         }
     }
-
 
 
     private IEnumerator PlayTrail(Vector3 StartPoint, Vector3 EndPoint, RaycastHit Hit)
