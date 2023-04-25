@@ -15,6 +15,7 @@ MonoBehaviour:
   WeaponPrefab: {fileID: 6917659481326538864, guid: 790325c4a3988a747918ffe93463ade7, type: 3}
   Name: Orange Staff
   Type: 4
+  WeaponBaseDamage: 5
   SpawnPoint: {x: 0, y: 0, z: 0}
   SpawnRotation: {x: -48.333, y: 0, z: 0}
   ShootConfig: {fileID: 11400000, guid: 40f6d74642f7f3b4d865bde5f834d0bb, type: 2}
@@ -23,5 +24,5 @@ MonoBehaviour:
   timeToSwitchOut: 0.3
   ActiveMonoBehaviour: {fileID: 0}
   Model: {fileID: 0}
-  LastShootTime: 0
+  LastShootTime: 10.126024
   ShootParticle: {fileID: 0}

@@ -15,6 +15,7 @@ MonoBehaviour:
   WeaponPrefab: {fileID: 6859842178193715958, guid: 1524d61ea37d8784b84148462bc3d982, type: 3}
   Name: Blue Staff
   Type: 0
+  WeaponBaseDamage: 1
   SpawnPoint: {x: 0, y: 0, z: 0}
   SpawnRotation: {x: -48.333, y: 0, z: 0}
   ShootConfig: {fileID: 11400000, guid: 75a28aad356eb9f48931a4785970b034, type: 2}
@@ -23,5 +24,5 @@ MonoBehaviour:
   timeToSwitchOut: 0.3
   ActiveMonoBehaviour: {fileID: 0}
   Model: {fileID: 0}
-  LastShootTime: 1.8269614
+  LastShootTime: 10.517365
   ShootParticle: {fileID: 0}

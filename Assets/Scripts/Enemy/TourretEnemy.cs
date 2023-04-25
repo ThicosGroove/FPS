@@ -39,10 +39,18 @@ public class TourretEnemy : AEnemy
     {
         healthBar.gameObject.SetActive(true);
         HealthBarFiller(damageRecieved);
+
+        TextDamage indicator = Instantiate(damageText, damageTextPos.position, Quaternion.identity).GetComponent<TextDamage>();
+        indicator.SetDamageText((int)damageRecieved);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     protected override void Die()
     {
-        
+        Destroy(this.gameObject.GetComponentInParent<Transform>().gameObject);
     }
 }

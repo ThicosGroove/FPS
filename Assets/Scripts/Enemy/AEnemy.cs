@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public abstract class AEnemy : MonoBehaviour
 {
     [SerializeField] private LayerMask plataformLayerMask;
+    [SerializeField] protected GameObject damageText;
+    [SerializeField] protected Transform damageTextPos;
 
     [SerializeField] protected float maxHealth;
     protected float patrolSpeed { get; set; }
@@ -18,7 +20,7 @@ public abstract class AEnemy : MonoBehaviour
 
     Rigidbody2D rb;
 
-    private float currentHealth;
+    protected float currentHealth;
     private float filledSpeed = 2f;
 
     protected State state;
