@@ -35,7 +35,7 @@ public class GunRecoil : MonoBehaviour
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
         transform.localRotation = Quaternion.Euler(currentRotation);
 
-        if (input.PlayerShootThisFrame())
+        if (input.IsShootCharging)
         {
             //RecoilFire();
         }

@@ -9,7 +9,7 @@ public class WeaponSO : ScriptableObject
     public GameObject WeaponPrefab;
     public string Name;
     public WeaponType Type;
-    public int WeaponBaseDamage;
+    public float WeaponBaseDamage;
     public Vector3 SpawnPoint;
     public Vector3 SpawnRotation;
 

@@ -71,8 +71,8 @@ public class FPSMove : MonoBehaviour
 
     private bool ChechingGround()
     {
-        bool ray1 = Physics.CheckSphere(groundCheckPos1.position, .1f, groundMask);
-        bool ray2 = Physics.CheckSphere(groundCheckPos2.position, .1f, groundMask);
+        bool ray1 = Physics.CheckSphere(groundCheckPos1.position, .2f, groundMask);
+        bool ray2 = Physics.CheckSphere(groundCheckPos2.position, .2f, groundMask);
 
         if (ray1 || ray2)
             return true;

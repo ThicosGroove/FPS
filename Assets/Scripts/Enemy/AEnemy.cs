@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 public abstract class AEnemy : MonoBehaviour
 {
-    [SerializeField] private LayerMask plataformLayerMask;
     [SerializeField] protected GameObject damageText;
     [SerializeField] protected Transform damageTextPos;
 
+    [Space]
     [SerializeField] protected float maxHealth;
     protected float patrolSpeed { get; set; }
     protected float chaseSpeed { get; set; }
 
-
+    [Space]
     [SerializeField] protected GameObject healthBar;
     [SerializeField] private Image filledHealthtBar;
     //private Animator anim;
@@ -21,7 +21,7 @@ public abstract class AEnemy : MonoBehaviour
     Rigidbody2D rb;
 
     protected float currentHealth;
-    private float filledSpeed = 2f;
+    //private float filledSpeed = 2f;
 
     protected State state;
     protected enum State
@@ -36,16 +36,17 @@ public abstract class AEnemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         //anim = GetComponent<Animator>();
         healthBar.gameObject.SetActive(false);
+
+        state = State.Sleep;
         currentHealth = maxHealth;
     }
 
-    protected abstract void MovementTowardsPlayer(GameObject target);
+    protected abstract void MovementTowardsPlayer();
 
     protected abstract void PatrolMovement();
+    protected abstract void AttackBehaviour();
 
-    protected abstract void DistanceToWake(GameObject target, float distToWake);
-
-    protected abstract void OnCollisionEnter2D(Collision2D collision);
+   // protected abstract void DistanceToWake();
 
     public abstract void LostHealth(float damageRecieved);
 
@@ -59,6 +60,10 @@ public abstract class AEnemy : MonoBehaviour
         filledHealthtBar.fillAmount = Mathf.Lerp(filledHealthtBar.fillAmount, fillAmountPercentage, 1);
     }
 
+    public abstract void TriggerEnter(GameObject player);
+    public abstract void TriggerStay();
+    public abstract void TriggerExit();
+
     //IEnumerator PlayHitAnimation()
     //{
     //    anim.SetBool("isHit", true);
@@ -69,17 +74,7 @@ public abstract class AEnemy : MonoBehaviour
     //}
 
     // For main Body, Hit by Player and Arrow 
- 
+
 
     // Both Triggers are For foot, used to flip
-    protected void OnTriggerExit2D(Collider2D collision)
-    {
- 
-    }
-
-    protected void OnTriggerEnter2D(Collider2D other)
-    {
-     
-    }
-
 }

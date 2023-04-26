@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -10,6 +11,14 @@ public class InputManager : MonoBehaviour
     {
         get { return _instance; }
     }
+
+    private bool isShootCharging = false;
+    private bool isShootStarted = false;
+    private bool isShootGoOff = false;
+
+    public bool IsShootStarted { get { return isShootStarted; } set { isShootStarted = value; } }
+    public bool IsShootCharging { get { return isShootCharging; } set { isShootCharging = value; } }
+    public bool IsShootGoOff { get { return isShootGoOff; } set { isShootGoOff = value; } }
 
     InputControl input;
 
@@ -28,6 +37,13 @@ public class InputManager : MonoBehaviour
         input = new InputControl();
     }
 
+    private void Start()
+    {
+        input.Character.Shoot.started += OnShootStart;
+        input.Character.Shoot.performed += OnShootCharge;
+        input.Character.Shoot.canceled += OnShootGoOff;
+    }
+
     private void OnEnable()
     {
         input.Enable();
@@ -36,6 +52,10 @@ public class InputManager : MonoBehaviour
     private void OnDisable()
     {
         input.Disable();
+
+        input.Character.Shoot.started -= OnShootStart;
+        input.Character.Shoot.performed -= OnShootCharge;
+        input.Character.Shoot.canceled -= OnShootGoOff;
     }
 
     #region Player Input
@@ -78,10 +98,24 @@ public class InputManager : MonoBehaviour
         return input.Character.Aim.triggered;
     }
 
-    public bool PlayerShootThisFrame()
+    private void OnShootStart(InputAction.CallbackContext context)
     {
-        float shoot = input.Character.Shoot.ReadValue<float>();
-        return shoot > 0 ? true : false;
+        isShootStarted = true;
+    }
+
+    public void OnShootCharge(InputAction.CallbackContext context)
+    {
+
+        isShootCharging = true;
+    }
+
+    private void OnShootGoOff(InputAction.CallbackContext context)
+    {
+        if (context.canceled)
+        {
+            IsShootCharging = false;
+            isShootGoOff = true;
+        }
     }
 
     public bool PlayerChangeWeaponNext()

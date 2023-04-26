@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 
 public class WeaponBehaviour : MonoBehaviour
 {
-    [SerializeField] private WeaponSO myWeapon;
+    [SerializeField] public WeaponSO myWeaponSO;
 
     private Animator anim;
     private InputManager input;
@@ -37,68 +37,71 @@ public class WeaponBehaviour : MonoBehaviour
 
     public IEnumerator SwitchIn()
     {
-        yield return new WaitForSeconds(myWeapon.timeToSwitchIn);
-        myWeapon.Model.gameObject.SetActive(true);
+        yield return new WaitForSeconds(myWeaponSO.timeToSwitchIn);
+        myWeaponSO.Model.gameObject.SetActive(true);
     }
 
     public IEnumerator SwitchOut()
     {
-        yield return new WaitForSeconds(myWeapon.timeToSwitchOut);
-        myWeapon.Model.gameObject.SetActive(false);
+        yield return new WaitForSeconds(myWeaponSO.timeToSwitchOut);
+        myWeaponSO.Model.gameObject.SetActive(false);
     }
 
 
     public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour)
     {
-        myWeapon.ActiveMonoBehaviour = ActiveMonoBehaviour;
-        myWeapon.LastShootTime = 0;
-        myWeapon.TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
+        myWeaponSO.ActiveMonoBehaviour = ActiveMonoBehaviour;
+        myWeaponSO.LastShootTime = 0;
+        myWeaponSO.TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
 
-        myWeapon.Model = Instantiate(myWeapon.WeaponPrefab);
-        myWeapon.Model.transform.SetParent(Parent, false);
-        myWeapon.Model.transform.localPosition = myWeapon.SpawnPoint;
-        myWeapon.Model.transform.localRotation = Quaternion.Euler(myWeapon.SpawnRotation);
+        myWeaponSO.Model = Instantiate(myWeaponSO.WeaponPrefab);
+        myWeaponSO.Model.transform.SetParent(Parent, false);
+        myWeaponSO.Model.transform.localPosition = myWeaponSO.SpawnPoint;
+        myWeaponSO.Model.transform.localRotation = Quaternion.Euler(myWeaponSO.SpawnRotation);
 
-        myWeapon.ShootParticle = myWeapon.Model.GetComponentInChildren<ParticleSystem>();
+        myWeaponSO.ShootParticle = myWeaponSO.Model.GetComponentInChildren<ParticleSystem>();
     }
 
     private Transform CameraPosition()
     {
-        return myWeapon.Model.GetComponentInParent<Camera>().transform;
+        return myWeaponSO.Model.GetComponentInParent<Camera>().transform;
     }
 
-    public void Shoot()
+    public void Shoot(float size, float damageMultiplier)
     {
-        if (Time.time > myWeapon.ShootConfig.FireRate + myWeapon.LastShootTime)
+        if (Time.time > myWeaponSO.ShootConfig.FireRate + myWeaponSO.LastShootTime)
         {
-            myWeapon.LastShootTime = Time.time;
-            myWeapon.ShootParticle.Play();
+
+            Debug.LogWarning(myWeaponSO.WeaponBaseDamage);
+
+            myWeaponSO.LastShootTime = Time.time;
+            myWeaponSO.ShootParticle.Play();
 
             Vector3 shootDirection = CameraPosition().forward
                 + new Vector3(
                     Random.Range(
-                        -myWeapon.ShootConfig.Spread.x,
-                        myWeapon.ShootConfig.Spread.x),
+                        -myWeaponSO.ShootConfig.Spread.x,
+                        myWeaponSO.ShootConfig.Spread.x),
                     Random.Range(
-                        -myWeapon.ShootConfig.Spread.y,
-                        myWeapon.ShootConfig.Spread.y),
+                        -myWeaponSO.ShootConfig.Spread.y,
+                        myWeaponSO.ShootConfig.Spread.y),
                     Random.Range(
-                        -myWeapon.ShootConfig.Spread.z,
-                        myWeapon.ShootConfig.Spread.z)
+                        -myWeaponSO.ShootConfig.Spread.z,
+                        myWeaponSO.ShootConfig.Spread.z)
                     );
 
             shootDirection.Normalize();
 
             if (Physics.Raycast(
-                myWeapon.ShootParticle.transform.position,
+                myWeaponSO.ShootParticle.transform.position,
                 shootDirection,
                 out RaycastHit hit,
                 float.MaxValue,
-                myWeapon.ShootConfig.HitMask))
+                myWeaponSO.ShootConfig.HitMask))
             {
-                myWeapon.ActiveMonoBehaviour.StartCoroutine(
+                myWeaponSO.ActiveMonoBehaviour.StartCoroutine(
                     PlayTrail(
-                        myWeapon.ShootParticle.transform.position,
+                        myWeaponSO.ShootParticle.transform.position,
                         hit.point,
                         hit));
 
@@ -108,16 +111,16 @@ public class WeaponBehaviour : MonoBehaviour
 
                 if (enemy != null)
                 {
-                    enemy.LostHealth(myWeapon.WeaponBaseDamage);
+                    enemy.LostHealth(myWeaponSO.WeaponBaseDamage);
                 }
 
             }
             else
             {
-                myWeapon.ActiveMonoBehaviour.StartCoroutine(
+                myWeaponSO.ActiveMonoBehaviour.StartCoroutine(
                     PlayTrail(
-                        myWeapon.ShootParticle.transform.position,
-                        myWeapon.ShootParticle.transform.position + (shootDirection * myWeapon.TrailConfig.MissDistance),
+                        myWeaponSO.ShootParticle.transform.position,
+                        myWeaponSO.ShootParticle.transform.position + (shootDirection * myWeaponSO.TrailConfig.MissDistance),
                         new RaycastHit()));
             }
         }
@@ -126,7 +129,7 @@ public class WeaponBehaviour : MonoBehaviour
 
     private IEnumerator PlayTrail(Vector3 StartPoint, Vector3 EndPoint, RaycastHit Hit)
     {
-        TrailRenderer instance = myWeapon.TrailPool.Get();
+        TrailRenderer instance = myWeaponSO.TrailPool.Get();
         instance.gameObject.SetActive(true);
         instance.transform.position = StartPoint;
         yield return null;
@@ -141,29 +144,29 @@ public class WeaponBehaviour : MonoBehaviour
                 StartPoint,
                 EndPoint,
                 Mathf.Clamp01(1 - (remainingDistance / distance)));
-            remainingDistance -= myWeapon.TrailConfig.SimulationSpeed * Time.deltaTime;
+            remainingDistance -= myWeaponSO.TrailConfig.SimulationSpeed * Time.deltaTime;
 
             yield return null;
         }
 
         instance.transform.position = EndPoint;
 
-        yield return new WaitForSeconds(myWeapon.TrailConfig.Duration);
+        yield return new WaitForSeconds(myWeaponSO.TrailConfig.Duration);
         yield return null;
         instance.emitting = false;
         instance.gameObject.SetActive(false);
-        myWeapon.TrailPool.Release(instance);
+        myWeaponSO.TrailPool.Release(instance);
     }
 
     private TrailRenderer CreateTrail()
     {
         GameObject instance = new GameObject("Bullet Trail");
         TrailRenderer trail = instance.AddComponent<TrailRenderer>();
-        trail.colorGradient = myWeapon.TrailConfig.Color;
-        trail.material = myWeapon.TrailConfig.Material;
-        trail.widthCurve = myWeapon.TrailConfig.WidthCurve;
-        trail.time = myWeapon.TrailConfig.Duration;
-        trail.minVertexDistance = myWeapon.TrailConfig.MinVertexDistance;
+        trail.colorGradient = myWeaponSO.TrailConfig.Color;
+        trail.material = myWeaponSO.TrailConfig.Material;
+        trail.widthCurve = myWeaponSO.TrailConfig.WidthCurve;
+        trail.time = myWeaponSO.TrailConfig.Duration;
+        trail.minVertexDistance = myWeaponSO.TrailConfig.MinVertexDistance;
 
         trail.emitting = false;
         trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;

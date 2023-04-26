@@ -1,28 +1,49 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TourretEnemy : AEnemy
 {
-
-    void Start()
-    {
-        
-    }
+    private bool IsPlayerInRange = false;
+    private GameObject currentPlayer;
 
     void Update()
     {
-        
+        switch (state)
+        {
+            case State.Sleep:
+               
+                break;
+            case State.Patrol:
+                
+                break;
+            case State.Chase:
+                MovementTowardsPlayer();
+                AttackBehaviour();
+                break;
+            default:
+                break;
+        }
+
+        LookingForPlayer();
     }
 
-    protected override void DistanceToWake(GameObject target, float distToWake)
+    private void LookingForPlayer()
+    {
+      
+    }
+
+
+
+    void OnDrawGizmos()
     {
 
     }
 
-    protected override void MovementTowardsPlayer(GameObject target)
+    protected override void MovementTowardsPlayer()
     {
-
+        transform.LookAt(currentPlayer.transform);
     }
 
     protected override void PatrolMovement()
@@ -30,9 +51,10 @@ public class TourretEnemy : AEnemy
 
     }
 
-    protected override void OnCollisionEnter2D(Collision2D collision)
+   
+    protected override void AttackBehaviour()
     {
-
+        // Attack 
     }
 
     public override void LostHealth(float damageRecieved)
@@ -53,4 +75,23 @@ public class TourretEnemy : AEnemy
     {
         Destroy(this.gameObject.GetComponentInParent<Transform>().gameObject);
     }
+
+    public override void TriggerEnter(GameObject player)
+    {
+        IsPlayerInRange = true;
+        currentPlayer = player;
+        state = State.Chase;
+    }
+
+    public override void TriggerStay()
+    {
+        
+    }
+
+    public override void TriggerExit()
+    {
+        IsPlayerInRange = false;
+        state = State.Sleep;
+    }
+
 }
