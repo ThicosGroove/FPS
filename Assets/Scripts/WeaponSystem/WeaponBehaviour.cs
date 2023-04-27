@@ -62,7 +62,7 @@ public class WeaponBehaviour : MonoBehaviour
         return MyWeaponSO.Model.GetComponentInParent<Camera>().transform;
     }
 
-    // Calcular a direção do Raycast
+    // Calcular a direÃ§Ã£o do Raycast
     // Play Trail em todos os tiros
     // Usar o evento do particle system para saber o que acertou
 
@@ -78,15 +78,9 @@ public class WeaponBehaviour : MonoBehaviour
 
             Vector3 shootDirection = CameraPosition().forward
                 + new Vector3(
-                    Random.Range(
-                        -MyWeaponSO.ShootConfig.Spread.x,
-                        MyWeaponSO.ShootConfig.Spread.x),
-                    Random.Range(
-                        -MyWeaponSO.ShootConfig.Spread.y,
-                        MyWeaponSO.ShootConfig.Spread.y),
-                    Random.Range(
-                        -MyWeaponSO.ShootConfig.Spread.z,
-                        MyWeaponSO.ShootConfig.Spread.z)
+                    Random.Range(-MyWeaponSO.ShootConfig.Spread.x, MyWeaponSO.ShootConfig.Spread.x),
+                    Random.Range(-MyWeaponSO.ShootConfig.Spread.y, MyWeaponSO.ShootConfig.Spread.y),
+                    Random.Range(-MyWeaponSO.ShootConfig.Spread.z, MyWeaponSO.ShootConfig.Spread.z)
                     );
 
             shootDirection.Normalize();
@@ -120,7 +114,7 @@ public class WeaponBehaviour : MonoBehaviour
                 MyWeaponSO.ActiveMonoBehaviour.StartCoroutine(
                     PlayTrailCO(
                         MyWeaponSO.ShootParticle.transform.position,
-                        MyWeaponSO.ShootParticle.transform.position + (shootDirection * MyWeaponSO.TrailConfig.MissDistance), // acertar a direção
+                        MyWeaponSO.ShootParticle.transform.position + (shootDirection * MyWeaponSO.TrailConfig.MissDistance), // acertar a direÃ§Ã£o
                         new RaycastHit()));
             }
         }
