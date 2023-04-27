@@ -8,22 +8,22 @@ public class WeaponSway : MonoBehaviour
     [SerializeField] private float smooth;
     [SerializeField] private float swayMulti;
 
-    InputManager input;
+    InputManager _input;
 
     private void Start()
     {
-        input = InputManager.Instance;
+        _input = InputManager.Instance;
     }
 
     void Update()
     {
-        float mouseX = input.GetPlayerMouseMovement().x;
-        float mouseY = input.GetPlayerMouseMovement().y;
+        var mouseX = _input.GetPlayerMouseMovement().x;
+        var mouseY = _input.GetPlayerMouseMovement().y;
 
-        Quaternion rotationX = Quaternion.AngleAxis(-mouseY, Vector3.right);
-        Quaternion rotationY = Quaternion.AngleAxis(mouseX, Vector3.up);
+        var rotationX = Quaternion.AngleAxis(-mouseY, Vector3.right);
+        var rotationY = Quaternion.AngleAxis(mouseX, Vector3.up);
 
-        Quaternion tartegRotation = rotationX * rotationY;
+        var tartegRotation = rotationX * rotationY;
 
         transform.localRotation = Quaternion.Slerp(transform.localRotation, tartegRotation, smooth * Time.deltaTime);
     }

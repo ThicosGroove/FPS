@@ -4,39 +4,38 @@ using UnityEngine;
 
 public class FPSMove : MonoBehaviour
 {
-    private InputManager input;
-    private CharacterController controller;
-    private Transform camTransform;
-
-    private bool ShouldDash => input.GetPlayerDashThisFrame();
-    private bool ShouldJump => input.GetPlayerJumpThisFrame();
-    private bool ShouldCrouch => input.GetPlayerCrouch();
-    private bool isAiming => input.GetPlayerAim();
-
-    private Vector3 playerVelocity;
-    private Vector3 moveDir;
-
-
     [Header("Ground Check")]
-    [SerializeField] private Transform groundCheckPos1;
-    [SerializeField] private Transform groundCheckPos2;
+    [SerializeField] private Transform groundCheckPos;
     [SerializeField] private LayerMask groundMask;
 
     [Header("Player Movement")]
     [SerializeField] private bool groundedPlayer;
     [SerializeField] private float playerSpeed = 15f;
     [SerializeField] private float jumpHeight = 1.0f;
-    [SerializeField] private float gravityValue = -9.81f;
+    [SerializeField] private float jumpGravity = -9.81f;
+    [SerializeField] private float groundedGravity = 0;
 
     [Header("Dash Parameters")]
     [SerializeField] private float dashSpeed = 30f;
     [SerializeField] private float dashTimer = 0.8f;
 
+    private InputManager _input;
+    private CharacterController _controller;
+    private Transform _camTransform;
+
+    private bool _ShouldDash => _input.GetPlayerDashThisFrame();
+    private bool _ShouldJump => _input.GetPlayerJumpThisFrame();
+    private bool _ShouldCrouch => _input.GetPlayerCrouch();
+    private bool _isAiming => _input.GetPlayerAim();
+
+    private Vector3 _playerVelocity;
+    private Vector3 _moveDir;
+
     private void Start()
     {
-        controller = GetComponent<CharacterController>();
-        camTransform = Camera.main.transform;
-        input = InputManager.Instance;
+        _controller = GetComponent<CharacterController>();
+        _camTransform = Camera.main.transform;
+        _input = InputManager.Instance;
     }
 
     void Update()
@@ -54,55 +53,53 @@ public class FPSMove : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 movement = input.GetPlayerMovement();
-        moveDir = new Vector3(movement.x, 0, movement.y).normalized;
-        moveDir = camTransform.forward * moveDir.z + camTransform.right * moveDir.x;
+        var movement = _input.GetPlayerMovement();
+        _moveDir = new Vector3(movement.x, 0, movement.y).normalized;
+        _moveDir = _camTransform.forward * _moveDir.z + _camTransform.right * _moveDir.x;
 
-        controller.Move(moveDir * Time.deltaTime * playerSpeed);
+        _controller.Move(_moveDir * Time.deltaTime * playerSpeed);
     }
 
     private void HandleJump()
     {
-        if (ShouldJump && groundedPlayer)
+        if (_ShouldJump && groundedPlayer)
         {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            _playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * jumpGravity);
         }
     }
 
     private bool ChechingGround()
     {
-        bool ray1 = Physics.CheckSphere(groundCheckPos1.position, .2f, groundMask);
-        bool ray2 = Physics.CheckSphere(groundCheckPos2.position, .2f, groundMask);
+        var ray = Physics.CheckSphere(groundCheckPos.position, .2f, groundMask);
 
-        if (ray1 || ray2)
-            return true;
+        if (ray) return true;
         else return false;
     }
 
     private void HandleGravity()
     {
-        if (groundedPlayer && playerVelocity.y < 0)
-            playerVelocity.y = 0f;
+        if (groundedPlayer && _playerVelocity.y < 0)
+            _playerVelocity.y = groundedGravity;
 
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
+        _playerVelocity.y += jumpGravity * Time.deltaTime;
+        _controller.Move(_playerVelocity * Time.deltaTime);
     }
 
     private void HandleDash()
     {
-        if (ShouldDash)
+        if (_ShouldDash)
         {
-            StartCoroutine(Dash());
+            StartCoroutine(DashCO());
         }
     }
 
-    IEnumerator Dash()
+    IEnumerator DashCO()
     {
-        float startTime = Time.time;
+        var startTime = Time.time;
 
         while (Time.time < startTime + dashTimer)
         {
-            controller.Move(moveDir * dashSpeed * Time.deltaTime);
+            _controller.Move(_moveDir * dashSpeed * Time.deltaTime);
 
             yield return null;
         }

@@ -12,15 +12,15 @@ public class InputManager : MonoBehaviour
         get { return _instance; }
     }
 
-    private bool isShootCharging = false;
-    private bool isShootStarted = false;
-    private bool isShootGoOff = false;
+    private bool _isShootCharging = false;
+    private bool _isShootStarted = false;
+    private bool _isShootGoOff = false;
 
-    public bool IsShootStarted { get { return isShootStarted; } set { isShootStarted = value; } }
-    public bool IsShootCharging { get { return isShootCharging; } set { isShootCharging = value; } }
-    public bool IsShootGoOff { get { return isShootGoOff; } set { isShootGoOff = value; } }
+    public bool IsShootStarted { get { return _isShootStarted; } set { _isShootStarted = value; } }
+    public bool IsShootCharging { get { return _isShootCharging; } set { _isShootCharging = value; } }
+    public bool IsShootGoOff { get { return _isShootGoOff; } set { _isShootGoOff = value; } }
 
-    InputControl input;
+    InputControl _input;
 
     void Awake()
     {
@@ -34,39 +34,39 @@ public class InputManager : MonoBehaviour
         }
 
         //base.Awake();
-        input = new InputControl();
+        _input = new InputControl();
     }
 
     private void Start()
     {
-        input.Character.Shoot.started += OnShootStart;
-        input.Character.Shoot.performed += OnShootCharge;
-        input.Character.Shoot.canceled += OnShootGoOff;
+        _input.Character.Shoot.started += OnShootStart;
+        _input.Character.Shoot.performed += OnShootCharge;
+        _input.Character.Shoot.canceled += OnShootGoOff;
     }
 
     private void OnEnable()
     {
-        input.Enable();
+        _input.Enable();
     }
 
     private void OnDisable()
     {
-        input.Disable();
+        _input.Disable();
 
-        input.Character.Shoot.started -= OnShootStart;
-        input.Character.Shoot.performed -= OnShootCharge;
-        input.Character.Shoot.canceled -= OnShootGoOff;
+        _input.Character.Shoot.started -= OnShootStart;
+        _input.Character.Shoot.performed -= OnShootCharge;
+        _input.Character.Shoot.canceled -= OnShootGoOff;
     }
 
     #region Player Input
     public Vector2 GetPlayerMovement()
     {
-        return input.Character.Movement.ReadValue<Vector2>();
+        return _input.Character.Movement.ReadValue<Vector2>();
     }
 
     public bool IsPlayerMoving()
     {
-        Vector2 newInput = input.Character.Movement.ReadValue<Vector2>();
+        Vector2 newInput = _input.Character.Movement.ReadValue<Vector2>();
 
         if (Mathf.Abs(newInput.x) > Mathf.Epsilon || Mathf.Abs(newInput.y) > Mathf.Epsilon) return true;
 
@@ -75,52 +75,52 @@ public class InputManager : MonoBehaviour
 
     public Vector2 GetPlayerMouseMovement()
     {
-        return input.Character.View.ReadValue<Vector2>();
+        return _input.Character.View.ReadValue<Vector2>();
     }
 
     public bool GetPlayerDashThisFrame()
     {
-        return input.Character.Dash.triggered;
+        return _input.Character.Dash.triggered;
     }
 
     public bool GetPlayerJumpThisFrame()
     {
-        return input.Character.Jump.triggered;
+        return _input.Character.Jump.triggered;
     }
 
     public bool GetPlayerCrouch()
     {
-        return input.Character.Crouch.triggered;
+        return _input.Character.Crouch.triggered;
     }
 
     public bool GetPlayerAim()
     {
-        return input.Character.Aim.triggered;
+        return _input.Character.Aim.triggered;
     }
 
     private void OnShootStart(InputAction.CallbackContext context)
     {
-        isShootStarted = true;
+        _isShootStarted = true;
     }
 
     public void OnShootCharge(InputAction.CallbackContext context)
     {
 
-        isShootCharging = true;
+        _isShootCharging = true;
     }
 
     private void OnShootGoOff(InputAction.CallbackContext context)
     {
         if (context.canceled)
         {
-            IsShootCharging = false;
-            isShootGoOff = true;
+            _isShootCharging = false;
+            _isShootGoOff = true;
         }
     }
 
     public bool PlayerChangeWeaponNext()
     {
-        return input.Character.ChangeWeaponNext.triggered;
+        return _input.Character.ChangeWeaponNext.triggered;
     }
 
 
@@ -130,7 +130,7 @@ public class InputManager : MonoBehaviour
 
     public bool PlayerPause()
     {
-        return input.System.Pause.triggered;
+        return _input.System.Pause.triggered;
     }
 
     #endregion

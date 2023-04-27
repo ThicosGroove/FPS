@@ -17,29 +17,31 @@ public class GunRecoil : MonoBehaviour
     [SerializeField] private float snappiness;
     [SerializeField] private float returnSpeed;
 
-    InputManager input;
+    InputManager _input;
     GunControl gunControl;
 
-    private Vector3 currentRotation;
-    private Vector3 targetRotation;
+    private Vector3 _currentRotation;
+    private Vector3 _targetRotation;
 
     private void Start()
     {
-        input = InputManager.Instance;
+        _input = InputManager.Instance;
         gunControl = GetComponentInChildren<GunControl>();
     }
 
     void Update()
     {
-        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
-        transform.localRotation = Quaternion.Euler(currentRotation);
+        _targetRotation = Vector3.Lerp(_targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
+        _currentRotation = Vector3.Slerp(_currentRotation, _targetRotation, snappiness * Time.deltaTime);
+        transform.localRotation = Quaternion.Euler(_currentRotation);
 
-        if (input.IsShootCharging)
+        if (_input.IsShootGoOff)
         {
             //RecoilFire();
         }
     }
+
+    // Trocar por anmimação
 
     //private void RecoilFire()
     //{

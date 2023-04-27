@@ -9,33 +9,28 @@ public class PlayerWeaponAction : MonoBehaviour
     [SerializeField] private float minChargedShoot; // minimo que precisa carregar 
     [SerializeField] private float timerTreshold;   // maximo de tempo que segura o tiro
 
-    private WeaponBehaviour myWeapon;
-    private float timer;
-    private float sizeMultiplier;
-    private float damageMultiplier;
+    private WeaponBehaviour _myWeapon;
+    private float _timer;
+    private float _sizeMultiplier;
+    private float _damageMultiplier;
 
+    InputManager _input;
 
-    InputManager input;
-
-
-
-    // Start is called before the first frame update
     void Start()
     {
-        input = InputManager.Instance;
+        _input = InputManager.Instance;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (WeaponSelector.ActiveWeapon == null) return;
 
-        myWeapon = WeaponSelector.ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
+        _myWeapon = WeaponSelector.ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
 
 
-        if (input.IsShootStarted)
+        if (_input.IsShootStarted)
         {
             ChargedShootBehaviour();
         }
@@ -44,44 +39,42 @@ public class PlayerWeaponAction : MonoBehaviour
 
     private void ChargedShootBehaviour()
     {
-        if (input.IsShootCharging)
+        if (_input.IsShootCharging)
         {
-            timer += Time.deltaTime;
-
             // Começa a contar o timer
             // O timer é a Porcentagem do tiro
-
-            damageMultiplier = timer;
-            sizeMultiplier = timer;
-
             // Aumenta o Dano 
             // Aumenta o Tamanho
 
-            if (timer >= timerTreshold)
+            _timer += Time.deltaTime;
+
+            //_damageMultiplier = _timer;   não tá funcionando da forma que eu queria
+            //_sizeMultiplier = _timer;
+
+            if (_timer >= timerTreshold)
             {
                 //Atira sozinho depois do tempo limite
                 ShootBehaviour();
             }
-
         }
-        else if (input.IsShootGoOff && timer > minChargedShoot)
+        else if (_input.IsShootGoOff && _timer > minChargedShoot)
         {
-            ShootBehaviour();
-
-            // Para o Timer e Atira
-            // usando o timer como porcentagem para o dano 
-            // e o tamanho do tiro
+            ShootBehaviour();        
         }
     }
 
     private void ShootBehaviour()
     {
-        Debug.LogWarning(myWeapon.myWeaponSO.WeaponBaseDamage);
-        input.IsShootCharging = false;
-        input.IsShootStarted = false;
-        damageMultiplier = 0;
-        sizeMultiplier = 0;
-        timer = 0;
-        myWeapon.Shoot(sizeMultiplier, damageMultiplier); // Temporário, até entender como funciona o multiplicador
+        // Para o Timer e Atira
+        // usando o timer como porcentagem para o dano 
+        // e o tamanho do tiro
+
+        Debug.LogWarning(_myWeapon.MyWeaponSO.WeaponBaseDamage);
+        _input.IsShootCharging = false;
+        _input.IsShootStarted = false;
+        _damageMultiplier = 0;
+        _sizeMultiplier = 0;
+        _timer = 0;
+        _myWeapon.Shoot(_sizeMultiplier, _damageMultiplier); // Temporário, até entender como funciona o multiplicador
     }
 }

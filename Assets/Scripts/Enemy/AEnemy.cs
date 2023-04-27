@@ -10,20 +10,20 @@ public abstract class AEnemy : MonoBehaviour
 
     [Space]
     [SerializeField] protected float maxHealth;
-    protected float patrolSpeed { get; set; }
-    protected float chaseSpeed { get; set; }
+    protected float _patrolSpeed { get; set; }
+    protected float _chaseSpeed { get; set; }
 
     [Space]
     [SerializeField] protected GameObject healthBar;
     [SerializeField] private Image filledHealthtBar;
     //private Animator anim;
 
-    Rigidbody2D rb;
+    Rigidbody2D _rb;
 
-    protected float currentHealth;
+    protected float _currentHealth;
     //private float filledSpeed = 2f;
 
-    protected State state;
+    protected State _state;
     protected enum State
     {
         Sleep,
@@ -33,36 +33,32 @@ public abstract class AEnemy : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
         //anim = GetComponent<Animator>();
         healthBar.gameObject.SetActive(false);
 
-        state = State.Sleep;
-        currentHealth = maxHealth;
-    }
-
-    protected abstract void MovementTowardsPlayer();
-
-    protected abstract void PatrolMovement();
-    protected abstract void AttackBehaviour();
-
-   // protected abstract void DistanceToWake();
-
-    public abstract void LostHealth(float damageRecieved);
-
-    protected abstract void Die();
-
-    protected virtual void HealthBarFiller(float damage)
-    {
-        currentHealth -= damage; 
-        float fillAmountPercentage = currentHealth / maxHealth;
-
-        filledHealthtBar.fillAmount = Mathf.Lerp(filledHealthtBar.fillAmount, fillAmountPercentage, 1);
+        _state = State.Sleep;
+        _currentHealth = maxHealth;
     }
 
     public abstract void TriggerEnter(GameObject player);
     public abstract void TriggerStay();
     public abstract void TriggerExit();
+    public abstract void LostHealth(float damageRecieved);
+
+    protected abstract void MovementTowardsPlayer();
+    protected abstract void PatrolMovement();
+    protected abstract void AttackBehaviour();
+    protected abstract void Die();
+   // protected abstract void DistanceToWake();
+
+    protected virtual void HealthBarFiller(float damage)
+    {
+        _currentHealth -= damage; 
+        float fillAmountPercentage = _currentHealth / maxHealth;
+
+        filledHealthtBar.fillAmount = Mathf.Lerp(filledHealthtBar.fillAmount, fillAmountPercentage, 1);
+    }
 
     //IEnumerator PlayHitAnimation()
     //{

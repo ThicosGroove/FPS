@@ -4520,12 +4520,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad299d4f84832bc4d89667c9c64e187d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoilX: -0.1
-  recoilY: -0.5
-  recoilZ: 1
-  aimRecoilX: -0.05
-  aimRecoilY: -0.5
-  aimRecoilZ: 0.5
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  aimRecoilX: 0
+  aimRecoilY: 0
+  aimRecoilZ: 0
   snappiness: 15
   returnSpeed: 10
 --- !u!43 &513354168
@@ -7933,37 +7933,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5686318254439506490, guid: 0b8001264a270614d9f4831c98270bba, type: 3}
   m_PrefabInstance: {fileID: 5686318255221080809}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &810106041
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 810106042}
-  m_Layer: 9
-  m_Name: Ground Check Position 2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &810106042
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810106041}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.188, y: -1, z: 0.1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1693653098}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &825328349
 GameObject:
   m_ObjectHideFlags: 0
@@ -18397,7 +18366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponSelector: {fileID: 1693653093}
-  minChargedShoot: 0.5
+  minChargedShoot: 0
   timerTreshold: 1.5
 --- !u!114 &1693653093
 MonoBehaviour:
@@ -18419,11 +18388,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 98be5a24deec4744f80b39a803fd9090, type: 2}
   - {fileID: 11400000, guid: f7662685df200774eb9b830355f3f720, type: 2}
   ActiveWeapon: {fileID: 0}
---- !u!4 &1693653098 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5686318254304959047, guid: 0b8001264a270614d9f4831c98270bba, type: 3}
-  m_PrefabInstance: {fileID: 5686318255221080809}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1720300303
 GameObject:
   m_ObjectHideFlags: 0
@@ -21311,7 +21275,7 @@ PrefabInstance:
     - target: {fileID: 4021310394461687717, guid: 0b8001264a270614d9f4831c98270bba, type: 3}
       propertyPath: groundCheckPos2
       value: 
-      objectReference: {fileID: 810106042}
+      objectReference: {fileID: 0}
     - target: {fileID: 4021310394461687717, guid: 0b8001264a270614d9f4831c98270bba, type: 3}
       propertyPath: groundMask.m_Bits
       value: 64
@@ -21470,11 +21434,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5686318254567374731, guid: 0b8001264a270614d9f4831c98270bba, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.067
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5686318254567374731, guid: 0b8001264a270614d9f4831c98270bba, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.043
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5686318254775059334, guid: 0b8001264a270614d9f4831c98270bba, type: 3}
       propertyPath: m_Layer

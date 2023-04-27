@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TriggerArea : MonoBehaviour
 {
-    AEnemy myEnemy;
+    AEnemy _myEnemy;
 
     private void Start()
     {
-        myEnemy = GetComponentInParent<AEnemy>();       
+        _myEnemy = GetComponentInParent<AEnemy>();       
     }
 
     private void OnTriggerEnter(Collider other)
@@ -17,17 +17,11 @@ public class TriggerArea : MonoBehaviour
         {
             GameObject player = other.transform.gameObject;
 
-            myEnemy.TriggerEnter(player);
+            _myEnemy.TriggerEnter(player);
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-            myEnemy.TriggerStay();      
-    }
+    private void OnTriggerStay(Collider other) => _myEnemy.TriggerStay(); 
 
-    private void OnTriggerExit(Collider other)
-    {
-            myEnemy.TriggerExit();        
-    }
+    private void OnTriggerExit(Collider other) => _myEnemy.TriggerExit(); 
 }

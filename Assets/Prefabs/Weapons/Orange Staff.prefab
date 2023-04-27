@@ -4931,4 +4931,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c4365183b18b547a06923b7f11aa3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myWeaponSO: {fileID: 11400000, guid: 98be5a24deec4744f80b39a803fd9090, type: 2}
+  MyWeaponSO: {fileID: 11400000, guid: 98be5a24deec4744f80b39a803fd9090, type: 2}

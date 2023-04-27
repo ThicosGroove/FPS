@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class TourretEnemy : AEnemy
 {
-    private bool IsPlayerInRange = false;
-    private GameObject currentPlayer;
+    private bool _isPlayerInRange = false;
+    private GameObject _currentPlayer;
 
     void Update()
     {
-        switch (state)
+        switch (_state)
         {
             case State.Sleep:
                
@@ -25,25 +25,29 @@ public class TourretEnemy : AEnemy
             default:
                 break;
         }
-
-        LookingForPlayer();
     }
 
-    private void LookingForPlayer()
+    public override void TriggerEnter(GameObject player)
     {
-      
+        _isPlayerInRange = true;
+        _currentPlayer = player;
+        _state = State.Chase;
     }
 
-
-
-    void OnDrawGizmos()
+    public override void TriggerStay()
     {
+        
+    }
 
+    public override void TriggerExit()
+    {
+        _isPlayerInRange = false;
+        _state = State.Sleep;
     }
 
     protected override void MovementTowardsPlayer()
     {
-        transform.LookAt(currentPlayer.transform);
+        transform.LookAt(_currentPlayer.transform);
     }
 
     protected override void PatrolMovement()
@@ -65,7 +69,7 @@ public class TourretEnemy : AEnemy
         TextDamage indicator = Instantiate(damageText, damageTextPos.position, Quaternion.identity).GetComponent<TextDamage>();
         indicator.SetDamageText((int)damageRecieved);
 
-        if (currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             Die();
         }
@@ -75,23 +79,4 @@ public class TourretEnemy : AEnemy
     {
         Destroy(this.gameObject.GetComponentInParent<Transform>().gameObject);
     }
-
-    public override void TriggerEnter(GameObject player)
-    {
-        IsPlayerInRange = true;
-        currentPlayer = player;
-        state = State.Chase;
-    }
-
-    public override void TriggerStay()
-    {
-        
-    }
-
-    public override void TriggerExit()
-    {
-        IsPlayerInRange = false;
-        state = State.Sleep;
-    }
-
 }

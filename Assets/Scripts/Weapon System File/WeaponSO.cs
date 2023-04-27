@@ -16,8 +16,8 @@ public class WeaponSO : ScriptableObject
     public ShootConfigurationSO ShootConfig;
     public TrailConfigurationSO TrailConfig;
 
-    [Range(0, 1)] public float timeToSwitchIn;
-    [Range(0, 1)] public float timeToSwitchOut;
+    [Range(0, 1)] public float TimeToSwitchIn;
+    [Range(0, 1)] public float TimeToSwitchOut;
 
     [HideInInspector] public MonoBehaviour ActiveMonoBehaviour;
     [HideInInspector] public GameObject Model;
