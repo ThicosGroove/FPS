@@ -99,21 +99,21 @@ public class InputManager : MonoBehaviour
     private void OnShootStart(InputAction.CallbackContext context)
     {
         _isShootStarted = true;
+        Debug.Log("Shoot Start Callback called");
     }
 
     public void OnShootCharge(InputAction.CallbackContext context)
     {
-
         _isShootCharging = true;
+        Debug.Log("Shoot Performed Callback called");
     }
 
     private void OnShootGoOff(InputAction.CallbackContext context)
     {
-        if (context.canceled)
-        {
-            _isShootCharging = false;
-            _isShootGoOff = true;
-        }
+        Debug.Log("Insinde context.canceled");
+        _isShootCharging = false;
+        _isShootGoOff = true;
+ 
     }
 
     public bool PlayerChangeWeaponNext()

@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [DisallowMultipleComponent]
 public class PlayerWeaponAction : MonoBehaviour
 {
     [SerializeField] private PlayerWeaponSelector WeaponSelector;
-    [SerializeField] private float minChargedShoot; // minimo que precisa carregar 
-    [SerializeField] private float timerTreshold;   // maximo de tempo que segura o tiro
-
+    [SerializeField] private float minChargedShoot = 0.5f; // minimo que precisa carregar 
+    [SerializeField] private float timerThreshold = 2f;   // maximo de tempo que segura o tiro
+    
     private WeaponBehaviour _myWeapon;
     private float _timer;
     private float _sizeMultiplier;
@@ -30,10 +31,8 @@ public class PlayerWeaponAction : MonoBehaviour
         _myWeapon = WeaponSelector.ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
 
 
-        if (_input.IsShootStarted)
-        {
-            ChargedShootBehaviour();
-        }
+        ChargedShootBehaviour();
+
     }
 
 
@@ -51,7 +50,7 @@ public class PlayerWeaponAction : MonoBehaviour
             //_damageMultiplier = _timer;   não tá funcionando da forma que eu queria
             //_sizeMultiplier = _timer;
 
-            if (_timer >= timerTreshold)
+            if (_timer >= timerThreshold)
             {
                 //Atira sozinho depois do tempo limite
                 ShootBehaviour();

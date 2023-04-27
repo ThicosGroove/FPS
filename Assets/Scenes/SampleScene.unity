@@ -7767,7 +7767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &763627640
 Transform:
   m_ObjectHideFlags: 0
@@ -18403,8 +18403,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponSelector: {fileID: 1693653093}
-  minChargedShoot: 0
-  timerTreshold: 0
+  minChargedShoot: 0.5
+  timerThreshold: 3
 --- !u!114 &1693653093
 MonoBehaviour:
   m_ObjectHideFlags: 0
