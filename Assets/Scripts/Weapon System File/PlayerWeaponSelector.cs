@@ -15,38 +15,38 @@ public class PlayerWeaponSelector : MonoBehaviour
     [Header("Runtime Filled")]
     public WeaponSO ActiveWeapon;
 
-    private WeaponBehaviour myWeapon;
-    private InputManager input;
-    private WeaponSO currentWeapon;
-    private int currentWeaponIndex = 0;
+    private WeaponBehaviour _myWeapon;
+    private InputManager _input;
+    private WeaponSO _currentWeapon;
+    private int _currentWeaponIndex = 0;
 
     private void Start()
     {
-        input = InputManager.Instance;
+        _input = InputManager.Instance;
 
-        currentWeapon = WeaponsList.Find(currentWeapon => currentWeapon.Type == Weapon);
+        _currentWeapon = WeaponsList.Find(currentWeapon => currentWeapon.Type == Weapon);
 
-        if (currentWeapon == null)
+        if (_currentWeapon == null)
         {
-            Debug.LogError($"No WeaponSO found for WeaponType: {currentWeapon}");
+            Debug.LogError($"No WeaponSO found for WeaponType: {_currentWeapon}");
             return;
         }
 
-        WeaponCreated.Add(currentWeapon.Name, currentWeapon.Type);
+        WeaponCreated.Add(_currentWeapon.Name, _currentWeapon.Type);
 
-        ActiveWeapon = currentWeapon;
-        myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
-        myWeapon.Spawn(WeaponParent, this);
+        ActiveWeapon = _currentWeapon;
+        _myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
+        _myWeapon.Spawn(WeaponParent, this);
     }
 
     private void Update()
     {
-        if (input.PlayerChangeWeaponNext())
+        if (_input.PlayerChangeWeaponNext())
         {        
-            ++currentWeaponIndex;
-            if (currentWeaponIndex > (WeaponsList.Count - 1))
+            ++_currentWeaponIndex;
+            if (_currentWeaponIndex > (WeaponsList.Count - 1))
             {
-                currentWeaponIndex = 0;
+                _currentWeaponIndex = 0;
             }
 
             Switching();
@@ -55,25 +55,24 @@ public class PlayerWeaponSelector : MonoBehaviour
 
     private void Switching()
     {
-
-        if (GetWeapon(WeaponsList[currentWeaponIndex]))
+        if (GetWeapon(WeaponsList[_currentWeaponIndex]))
         {
-            StartCoroutine(myWeapon.SwitchOut());
-            ActiveWeapon = WeaponsList[currentWeaponIndex];
-            currentWeapon = ActiveWeapon;
-            myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
-            StartCoroutine(myWeapon.SwitchIn());
+            StartCoroutine(_myWeapon.SwitchOutCO());
+            ActiveWeapon = WeaponsList[_currentWeaponIndex];
+            _currentWeapon = ActiveWeapon;
+            _myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
+            StartCoroutine(_myWeapon.SwitchInCO());
 
         }
         else
         {
-            StartCoroutine(myWeapon.SwitchOut());
-            ActiveWeapon = WeaponsList[currentWeaponIndex];
-            myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
-            myWeapon.Spawn(WeaponParent, this);
-            currentWeapon = ActiveWeapon;
-            WeaponCreated.Add(currentWeapon.Name, currentWeapon.Type);
-            StartCoroutine(myWeapon.SwitchIn());
+            StartCoroutine(_myWeapon.SwitchOutCO());
+            ActiveWeapon = WeaponsList[_currentWeaponIndex];
+            _myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
+            _myWeapon.Spawn(WeaponParent, this);
+            _currentWeapon = ActiveWeapon;
+            WeaponCreated.Add(_currentWeapon.Name, _currentWeapon.Type);
+            StartCoroutine(_myWeapon.SwitchInCO());
 
         }
     }

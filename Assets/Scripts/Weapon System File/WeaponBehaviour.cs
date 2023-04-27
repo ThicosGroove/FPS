@@ -30,13 +30,13 @@ public class WeaponBehaviour : MonoBehaviour
     }
 
 
-    public IEnumerator SwitchIn()
+    public IEnumerator SwitchInCO()
     {
         yield return new WaitForSeconds(MyWeaponSO.TimeToSwitchIn);
         MyWeaponSO.Model.gameObject.SetActive(true);
     }
 
-    public IEnumerator SwitchOut()
+    public IEnumerator SwitchOutCO()
     {
         yield return new WaitForSeconds(MyWeaponSO.TimeToSwitchOut);
         MyWeaponSO.Model.gameObject.SetActive(false);
