@@ -62,6 +62,10 @@ public class WeaponBehaviour : MonoBehaviour
         return MyWeaponSO.Model.GetComponentInParent<Camera>().transform;
     }
 
+    // Calcular a direção do Raycast
+    // Play Trail em todos os tiros
+    // Usar o evento do particle system para saber o que acertou
+
     public void Shoot(float size, float damageMultiplier)
     {
         if (Time.time > MyWeaponSO.ShootConfig.FireRate + MyWeaponSO.LastShootTime)
@@ -86,6 +90,7 @@ public class WeaponBehaviour : MonoBehaviour
                     );
 
             shootDirection.Normalize();
+
 
             if (Physics.Raycast(
                 MyWeaponSO.ShootParticle.transform.position,
@@ -115,7 +120,7 @@ public class WeaponBehaviour : MonoBehaviour
                 MyWeaponSO.ActiveMonoBehaviour.StartCoroutine(
                     PlayTrailCO(
                         MyWeaponSO.ShootParticle.transform.position,
-                        MyWeaponSO.ShootParticle.transform.position + (shootDirection * MyWeaponSO.TrailConfig.MissDistance),
+                        MyWeaponSO.ShootParticle.transform.position + (shootDirection * MyWeaponSO.TrailConfig.MissDistance), // acertar a direção
                         new RaycastHit()));
             }
         }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using DG.Tweening;
 
 public class CinemachinePOVExtension : CinemachineExtension
 {
@@ -11,27 +12,27 @@ public class CinemachinePOVExtension : CinemachineExtension
     [SerializeField] private float clampAnlge = 80f;
 
     [Header("Tilt Movement")]
-    [SerializeField] private int dutch = 2;
+    [SerializeField] private int tilt = 2;
     [SerializeField] private float smooth = 1f;
     [SerializeField] private float timeToTilt = 1f;
 
-    CinemachineVirtualCamera virtualCamera;
+    private CinemachineVirtualCamera _virtualCamera;
+    private Camera _mainCamera;
 
-    private InputManager input;
-    private Vector3 startingRotation;
-    private Camera mainCamera;
+    private InputManager _input;
+    private Vector3 _startingRotation;
 
     protected override void Awake()
     {
-        input = InputManager.Instance;
-        mainCamera = Camera.main;
+        _input = InputManager.Instance;
+        _mainCamera = Camera.main;
 
         base.Awake();
     }
 
     private void Start()
     {
-        virtualCamera = GetComponent<CinemachineVirtualCamera>();
+        _virtualCamera = GetComponent<CinemachineVirtualCamera>();
         Cursor.visible = false;
     }
 
@@ -48,16 +49,16 @@ public class CinemachinePOVExtension : CinemachineExtension
         {
             if (stage == CinemachineCore.Stage.Aim)
             {
-                if (startingRotation == null) startingRotation = transform.localRotation.eulerAngles;
+                if (_startingRotation == null) _startingRotation = transform.localRotation.eulerAngles;
 
                 if (Application.isPlaying)
                 {
-                    Vector2 deltaInput = input.GetPlayerMouseMovement();
+                    Vector2 deltaInput = _input.GetPlayerMouseMovement();
 
-                    startingRotation.x += deltaInput.x * horizontalSpeed * Time.deltaTime;
-                    startingRotation.y += deltaInput.y * verticalSpeed * Time.deltaTime;
-                    startingRotation.y = Mathf.Clamp(startingRotation.y, -clampAnlge, clampAnlge);
-                    state.RawOrientation = Quaternion.Euler(-startingRotation.y, startingRotation.x, 0f);
+                    _startingRotation.x += deltaInput.x * horizontalSpeed * Time.deltaTime;
+                    _startingRotation.y += deltaInput.y * verticalSpeed * Time.deltaTime;
+                    _startingRotation.y = Mathf.Clamp(_startingRotation.y, -clampAnlge, clampAnlge);
+                    state.RawOrientation = Quaternion.Euler(-_startingRotation.y, _startingRotation.x, 0f);
                 }
             }
         }
@@ -65,23 +66,47 @@ public class CinemachinePOVExtension : CinemachineExtension
 
     private void CameraFollow()
     {
-        transform.position = mainCamera.transform.position;
-        transform.rotation = mainCamera.transform.rotation;
+        transform.position = _mainCamera.transform.position;
+        transform.rotation = _mainCamera.transform.rotation;
     }
 
+    // Usar o DOTween para rotacionar a camera de forma mais controlada
     private void CameraTilt()
     {
-        Vector2 deltaInput = input.GetPlayerMovement();
+        Vector2 deltaInput = _input.GetPlayerMovement();
 
-        virtualCamera.m_Lens.Dutch = deltaInput.x > 0 ? -CalculateTilt(dutch) : deltaInput.x < 0 ? CalculateTilt(dutch) : CalculateTilt(0);
+        //if (deltaInput.x > 0)
+        //{
+        //    CalculateTilt(tilt);
+        //}
+        //else if (deltaInput.x < 0)
+        //{
+        //    CalculateTilt(-tilt);
+        //}
+        //else
+        //{
+        //    CalculateTilt(0);
+        //}
+
+        //tilt = deltaInput.x > 0 ? CalculateTilt(tilt) : deltaInput.x < 0
+
+        //_virtualCamera.m_Lens.Dutch = deltaInput.x > 0 ? CalculateTilt(dutch) : deltaInput.x < 0 ? CalculateTilt(dutch) : CalculateTilt(0);
         //virtualCamera.m_Lens.Dutch = deltaInput.x > 0 ? -CalculateTilt(tilt) : CalculateTilt(tilt);
     }
 
-    private float CalculateTilt(int tilt)
+    // Usar DoTween para controlar o FOV de forma mais controlada
+    private void CameraFOV()
     {
-        float normalDutch = virtualCamera.m_Lens.Dutch;
-
-        //return Mathf.MoveTowards(normalDutch, tilt, (timeToTilt / smooth) * Time.deltaTime);
-        return Mathf.Lerp(0, tilt, 0.5f * Time.deltaTime);
     }
+
+    //private void CalculateTilt(int tilt)
+    //{
+    //    var tiltAngle = new Vector3(0f, 0f, tilt);
+    //    transform.DORotate(tiltAngle, timeToTilt, RotateMode.Fast);
+
+
+    //    return Mathf.MoveTowards(normalDutch, tilt, (timeToTilt / smooth) * Time.deltaTime);
+
+    //}
+
 }

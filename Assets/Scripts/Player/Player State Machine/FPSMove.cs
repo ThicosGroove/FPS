@@ -7,13 +7,17 @@ public class FPSMove : MonoBehaviour
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheckPos;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private bool groundedPlayer;
 
     [Header("Player Movement")]
-    [SerializeField] private bool groundedPlayer;
     [SerializeField] private float playerSpeed = 15f;
+
+    [Header("Jump Paramenters")]
     [SerializeField] private float jumpHeight = 1.0f;
     [SerializeField] private float jumpGravity = -9.81f;
     [SerializeField] private float groundedGravity = 0;
+    [SerializeField] private float delayForSecondJumpSeconds = 0.5f;
+    [SerializeField] private bool canSecondJump = false;
 
     [Header("Dash Parameters")]
     [SerializeField] private float dashSpeed = 30f;
@@ -47,6 +51,7 @@ public class FPSMove : MonoBehaviour
         HandleMovement();
 
         HandleJump();
+        HandleSecondJump();
 
         HandleDash();
     }
@@ -65,6 +70,24 @@ public class FPSMove : MonoBehaviour
         if (_ShouldJump && groundedPlayer)
         {
             _playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * jumpGravity);
+
+            StartCoroutine(DelayForSecondJumpCO());
+        }
+    }
+
+    private IEnumerator DelayForSecondJumpCO()
+    {
+        yield return new WaitForSeconds(delayForSecondJumpSeconds);
+        canSecondJump = true;
+    } 
+
+    private void HandleSecondJump()
+    {
+        if (_ShouldJump && canSecondJump)
+        {
+            _playerVelocity.y = 0;
+            _playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * jumpGravity);
+            canSecondJump = false;
         }
     }
 
@@ -72,7 +95,11 @@ public class FPSMove : MonoBehaviour
     {
         var ray = Physics.CheckSphere(groundCheckPos.position, .2f, groundMask);
 
-        if (ray) return true;
+        if (ray)
+        {
+            canSecondJump = false;
+            return true;
+        }
         else return false;
     }
 
@@ -93,7 +120,7 @@ public class FPSMove : MonoBehaviour
         }
     }
 
-    IEnumerator DashCO()
+    private IEnumerator DashCO()
     {
         var startTime = Time.time;
 
