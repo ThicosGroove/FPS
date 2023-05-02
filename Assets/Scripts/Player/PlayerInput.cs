@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(FPSMove)), RequireComponent(typeof(PlayerWeaponAction))]
+[RequireComponent(typeof(FPSMove)), RequireComponent(typeof(PlayerWeaponAction)), RequireComponent(typeof(PlayerWeaponSelector))]
 public class PlayerInput : MonoBehaviour
 {
     InputControl _input;

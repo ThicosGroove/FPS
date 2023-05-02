@@ -13,16 +13,15 @@ MonoBehaviour:
   m_Name: Yellow_Staff
   m_EditorClassIdentifier: 
   WeaponPrefab: {fileID: 6917659481326538864, guid: 5dc215e7c40b11144807dc25be19460d, type: 3}
-  Name: Yellow Staff
+  Name: Yellow_Staff
   Type: 2
   WeaponBaseDamage: 7
   SpawnPoint: {x: 0, y: 0, z: 0}
   SpawnRotation: {x: -48.333, y: 0, z: 0}
   ShootConfig: {fileID: 11400000, guid: 4d2d54ca836417f46ae48c1fd032b908, type: 2}
-  TrailConfig: {fileID: 11400000, guid: 3bcbf4d74eca2ae47970aa5fa3578f46, type: 2}
-  timeToSwitchIn: 0.2
-  timeToSwitchOut: 0.3
-  ActiveMonoBehaviour: {fileID: 0}
+  TimeToSwitchIn: 0
+  TimeToSwitchOut: 0
+  ActiveMonoBehaviour: {fileID: 2446863860838074891, guid: 5dc215e7c40b11144807dc25be19460d, type: 3}
   Model: {fileID: 0}
   LastShootTime: 19.483091
   ShootParticle: {fileID: 0}

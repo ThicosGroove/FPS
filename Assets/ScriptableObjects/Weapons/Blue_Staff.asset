@@ -13,16 +13,15 @@ MonoBehaviour:
   m_Name: Blue_Staff
   m_EditorClassIdentifier: 
   WeaponPrefab: {fileID: 6859842178193715958, guid: 1524d61ea37d8784b84148462bc3d982, type: 3}
-  Name: Blue Staff
+  Name: Blue_Staff
   Type: 0
   WeaponBaseDamage: 1
   SpawnPoint: {x: 0, y: 0, z: 0}
   SpawnRotation: {x: -48.333, y: 0, z: 0}
   ShootConfig: {fileID: 11400000, guid: 75a28aad356eb9f48931a4785970b034, type: 2}
-  TrailConfig: {fileID: 11400000, guid: ef6640400c916724ea935af7e99e4a3f, type: 2}
-  timeToSwitchIn: 0.2
-  timeToSwitchOut: 0.3
+  TimeToSwitchIn: 0
+  TimeToSwitchOut: 0
   ActiveMonoBehaviour: {fileID: 0}
   Model: {fileID: 0}
-  LastShootTime: 10.517365
+  LastShootTime: 0
   ShootParticle: {fileID: 0}

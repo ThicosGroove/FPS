@@ -13,15 +13,21 @@ public class WeaponBehaviour : MonoBehaviour
     private void Start()
     {
         _anim = GetComponent<Animator>();
+        MyWeaponSO.ActiveMonoBehaviour = this;
+
+        if (!_anim)
+        {
+            Debug.LogError("Não achou animator");
+        }
         _input = InputManager.Instance;
     }
 
     private void Update()
     {
-        if (_input.PlayerChangeWeaponNext())
-        {
-            PlaySwithOutAnim();
-        }
+        //if (_input.PlayerChangeWeaponNext())
+        //{
+        //    PlaySwithOutAnim();
+        //}
     }
 
     public void PlaySwithOutAnim()
@@ -33,13 +39,15 @@ public class WeaponBehaviour : MonoBehaviour
     public IEnumerator SwitchInCO()
     {
         yield return new WaitForSeconds(MyWeaponSO.TimeToSwitchIn);
-        MyWeaponSO.Model.gameObject.SetActive(true);
+        //_anim.SetBool("hasChanged", true);
     }
 
     public IEnumerator SwitchOutCO()
     {
+        Debug.LogWarning($"Trocou arma {this.name}");
+
+        _anim.SetBool("hasChanged", true);
         yield return new WaitForSeconds(MyWeaponSO.TimeToSwitchOut);
-        MyWeaponSO.Model.gameObject.SetActive(false);
     }
 
     #region Test

@@ -13,16 +13,15 @@ MonoBehaviour:
   m_Name: Orange_Staff
   m_EditorClassIdentifier: 
   WeaponPrefab: {fileID: 6917659481326538864, guid: 790325c4a3988a747918ffe93463ade7, type: 3}
-  Name: Orange Staff
+  Name: Orange_Staff
   Type: 4
   WeaponBaseDamage: 5
   SpawnPoint: {x: 0, y: 0, z: 0}
   SpawnRotation: {x: -48.333, y: 0, z: 0}
   ShootConfig: {fileID: 11400000, guid: 40f6d74642f7f3b4d865bde5f834d0bb, type: 2}
-  TrailConfig: {fileID: 11400000, guid: d6091ffc69b6f794fa532923e992756c, type: 2}
-  timeToSwitchIn: 0.2
-  timeToSwitchOut: 0.3
-  ActiveMonoBehaviour: {fileID: 0}
+  TimeToSwitchIn: 0
+  TimeToSwitchOut: 0
+  ActiveMonoBehaviour: {fileID: 6132308233779560475, guid: 790325c4a3988a747918ffe93463ade7, type: 3}
   Model: {fileID: 0}
   LastShootTime: 10.126024
   ShootParticle: {fileID: 0}

@@ -32,7 +32,7 @@ public class PlayerWeaponAction : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _myWeapon = WeaponSelector.ActiveWeapon;
+        _myWeapon = WeaponSelector.activeWeapon;
         _weaponShootBehaviour = _myWeapon.GetComponent<WeaponShootBehaviour>();
     }
 
@@ -41,6 +41,12 @@ public class PlayerWeaponAction : MonoBehaviour
         ChargedShootBehaviour();
     }
 
+
+    public void UpdateCurrentWeapon(GameObject currentWeapon)
+    {
+        _myWeapon = currentWeapon;
+        _weaponShootBehaviour = _myWeapon.GetComponent<WeaponShootBehaviour>();
+    }
 
     private void ChargedShootBehaviour()
     {

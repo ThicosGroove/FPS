@@ -4528,7 +4528,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32280
+  m_Name: pb_Mesh21654
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18870,7 +18870,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponSelector: {fileID: 8730030155000188238}
   minChargedShoot: 0.1
-  timerThreshold: 2
+  timerThreshold: 1
+  _myWeapon: {fileID: 0}
 --- !u!43 &1713177038
 Mesh:
   m_ObjectHideFlags: 0
@@ -22478,9 +22479,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8be4c25f51cf8b2468df6ca2cc9081bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapon: 0
+  WeaponType: 0
   WeaponParent: {fileID: 1270667272}
   WeaponsList:
   - {fileID: 6859842178193715958, guid: 1524d61ea37d8784b84148462bc3d982, type: 3}
-  ActiveWeapon: {fileID: 0}
-  _currentWeapon: {fileID: 0}
+  - {fileID: 6917659481326538864, guid: c7dc8106a7209f4459ea26b1c1680e2a, type: 3}
+  - {fileID: 6917659481326538864, guid: 790325c4a3988a747918ffe93463ade7, type: 3}
+  - {fileID: 6917659481326538864, guid: 5dc215e7c40b11144807dc25be19460d, type: 3}
+  activeWeapon: {fileID: 0}
