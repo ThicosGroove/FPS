@@ -8,35 +8,38 @@ public class PlayerWeaponSelector : MonoBehaviour
 {
     [SerializeField] private WeaponType Weapon;
     [SerializeField] private Transform WeaponParent;
-    [SerializeField] private List<WeaponSO> WeaponsList;
+    [SerializeField] private List<GameObject> WeaponsList;
     [SerializeField] private Dictionary<string, WeaponType> WeaponCreated = new Dictionary<string, WeaponType>();
 
     [Space]
     [Header("Runtime Filled")]
-    public WeaponSO ActiveWeapon;
+    [SerializeField] public GameObject ActiveWeapon;
 
-    private WeaponBehaviour _myWeapon;
+    private WeaponSO _weaponSO;
+
+    private WeaponBehaviour _myWeaponBehaviour;
     private PlayerInput _input;
-    private WeaponSO _currentWeapon;
     private int _currentWeaponIndex = 0;
 
     private void Start()
     {
         _input = GetComponent<PlayerInput>();
 
-        _currentWeapon = WeaponsList.Find(currentWeapon => currentWeapon.Type == Weapon);
+        //ActiveWeapon = WeaponsList.Find(currentWeapon => currentWeapon.Type == Weapon);
+        ActiveWeapon = WeaponsList[0].gameObject;
 
-        if (_currentWeapon == null)
+        if (ActiveWeapon == null)
         {
-            Debug.LogError($"No WeaponSO found for WeaponType: {_currentWeapon}");
+            Debug.LogError($"No WeaponSO found for WeaponType: {ActiveWeapon}");
             return;
         }
 
-        WeaponCreated.Add(_currentWeapon.Name, _currentWeapon.Type);
+        _weaponSO = ActiveWeapon.GetComponent<WeaponBehaviour>().MyWeaponSO;
 
-        ActiveWeapon = _currentWeapon;
-        _myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
-        _myWeapon.Spawn(WeaponParent, this);
+        _myWeaponBehaviour = _weaponSO.WeaponPrefab.GetComponent<WeaponBehaviour>();
+
+        
+        Spawn(WeaponParent, this);
     }
 
     private void Update()
@@ -57,31 +60,43 @@ public class PlayerWeaponSelector : MonoBehaviour
     {
         if (GetWeapon(WeaponsList[_currentWeaponIndex]))
         {
-            StartCoroutine(_myWeapon.SwitchOutCO());
+            StartCoroutine(_myWeaponBehaviour.SwitchOutCO());
             ActiveWeapon = WeaponsList[_currentWeaponIndex];
-            _currentWeapon = ActiveWeapon;
-            _myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
-            StartCoroutine(_myWeapon.SwitchInCO());
+            _myWeaponBehaviour = _weaponSO.WeaponPrefab.GetComponent<WeaponBehaviour>();
+            StartCoroutine(_myWeaponBehaviour.SwitchInCO());
 
         }
         else
         {
-            StartCoroutine(_myWeapon.SwitchOutCO());
+            StartCoroutine(_myWeaponBehaviour.SwitchOutCO());
             ActiveWeapon = WeaponsList[_currentWeaponIndex];
-            _myWeapon = ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
-            _myWeapon.Spawn(WeaponParent, this);
-            _currentWeapon = ActiveWeapon;
-            WeaponCreated.Add(_currentWeapon.Name, _currentWeapon.Type);
-            StartCoroutine(_myWeapon.SwitchInCO());
+            _myWeaponBehaviour = _weaponSO.WeaponPrefab.GetComponent<WeaponBehaviour>();
+            Spawn(WeaponParent, this);
+            WeaponCreated.Add(_weaponSO.Name, _weaponSO.Type);
+            StartCoroutine(_myWeaponBehaviour.SwitchInCO());
 
         }
     }
 
-    private bool GetWeapon(WeaponSO searchType)
+    private bool GetWeapon(GameObject searchType)
     {
-        if (WeaponCreated.ContainsValue(searchType.Type) && WeaponCreated.ContainsKey(searchType.Name))
+        var newWeapon = searchType.GetComponent<WeaponBehaviour>().MyWeaponSO;
+
+        if (WeaponCreated.ContainsValue(newWeapon.Type) && WeaponCreated.ContainsKey(newWeapon.Name))
             return true;
 
         return false;
+    }
+
+    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour)
+    {
+
+        var newWeapon = Instantiate(ActiveWeapon);
+        newWeapon.transform.SetParent(Parent, false);
+        newWeapon.transform.localPosition = _weaponSO.SpawnPoint;
+        newWeapon.transform.localRotation = Quaternion.Euler(_weaponSO.SpawnRotation);
+
+        ActiveWeapon = newWeapon;
+        WeaponCreated.Add(_weaponSO.name, _weaponSO.Type);
     }
 }

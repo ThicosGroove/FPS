@@ -9,39 +9,33 @@ public class WeaponShootBehaviour : MonoBehaviour
 
     [SerializeField] private LayerMask hitMask;
 
-    Camera mainCamera;
+    [SerializeField] Camera mainCamera;
 
     private float damage;
 
-    [SerializeField] Transform FPSCamera;
-
     private void Start()
     {
-        mainCamera = Camera.main;
+        //mainCamera = Camera.main;
 
         damage = MyWeaponSO.WeaponBaseDamage;
     }
 
 
     // Multiplicar Damage e Size
-    public void ProcessShoot(float sizeMulti, float damageMulti)
+    public void ProcessShoot(Vector3 pos, Vector3 dir, float sizeMulti, float damageMulti)
     {
-        var cameraTransform = mainCamera.transform.position;
-        var dir = mainCamera.transform.TransformDirection(Vector3.forward);
+      
 
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(cameraTransform, dir, out hitInfo, 1000f, hitMask))
+        if (Physics.Raycast(pos, dir, out hitInfo, 1000f, hitMask))
         {
             Debug.LogWarning(hitInfo.point);
-
 
             _particleBehaviour.gameObject.transform.LookAt(hitInfo.point);
 
             Shoot(sizeMulti, damage);
         }
-
-
     }
 
     private void Shoot(float sizeMulti, float damageMulti)

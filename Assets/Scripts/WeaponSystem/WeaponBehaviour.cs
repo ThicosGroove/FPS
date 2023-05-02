@@ -42,21 +42,6 @@ public class WeaponBehaviour : MonoBehaviour
         MyWeaponSO.Model.gameObject.SetActive(false);
     }
 
-
-    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour)
-    {
-        MyWeaponSO.ActiveMonoBehaviour = ActiveMonoBehaviour;
-        MyWeaponSO.LastShootTime = 0;
-        //MyWeaponSO.TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
-
-        MyWeaponSO.Model = Instantiate(MyWeaponSO.WeaponPrefab);
-        MyWeaponSO.Model.transform.SetParent(Parent, false);
-        MyWeaponSO.Model.transform.localPosition = MyWeaponSO.SpawnPoint;
-        MyWeaponSO.Model.transform.localRotation = Quaternion.Euler(MyWeaponSO.SpawnRotation);
-
-        MyWeaponSO.ShootParticle = MyWeaponSO.Model.GetComponentInChildren<ParticleSystem>();
-    }
-
     #region Test
     //private Transform CameraPosition()
     //{

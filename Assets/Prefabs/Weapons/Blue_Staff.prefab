@@ -49,7 +49,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -4883,7 +4883,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa98eb56d4104c4f9904d82ae429a5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _particleHitMarker: {fileID: 2349045508292482945, guid: a2dd9d7427ce77c4b978d8a89f3c2a73, type: 3}
+  particleHitMarker: {fileID: 2349045508292482945, guid: a2dd9d7427ce77c4b978d8a89f3c2a73, type: 3}
+  _particleSystemBullet: {fileID: 7105333929522929335}
   finalDamage: 0
 --- !u!1 &6859842178193715958
 GameObject:
@@ -5022,5 +5023,5 @@ MonoBehaviour:
   _particleBehaviour: {fileID: 3022285784856643107}
   hitMask:
     serializedVersion: 2
-    m_Bits: 0
-  FPSCamera: {fileID: 0}
+    m_Bits: 1527
+  mainCamera: {fileID: 0}

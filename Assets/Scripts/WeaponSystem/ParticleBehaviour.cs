@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ParticleBehaviour : MonoBehaviour
 {
-    [SerializeField]private GameObject _particleHitMarker;
+    [SerializeField] private GameObject particleHitMarker;
 
-    private ParticleSystem _particleSystemBullet;
+    [SerializeField] private ParticleSystem _particleSystemBullet;
     private List<ParticleCollisionEvent> _collisionEvents;
 
     public float finalDamage;
 
     private void Start()
     {
-        _particleSystemBullet = GetComponent<ParticleSystem>();
+        //_particleSystemBullet = GetComponent<ParticleSystem>();
         _collisionEvents = new List<ParticleCollisionEvent>();
     }
 
@@ -28,7 +28,7 @@ public class ParticleBehaviour : MonoBehaviour
             return;
         }
 
-        
+
         _particleSystemBullet.Play();
     }
 
@@ -43,7 +43,7 @@ public class ParticleBehaviour : MonoBehaviour
         while (i < numCollisionEvents)
         {
             Debug.LogWarning($"ACERTOU {other.name}");
-            var newHitMarker = Instantiate(_particleHitMarker, _collisionEvents[i].intersection, Quaternion.LookRotation(_collisionEvents[i].normal));
+            var newHitMarker = Instantiate(particleHitMarker, _collisionEvents[i].intersection, Quaternion.LookRotation(_collisionEvents[i].normal));
             //Criar Pool para essa nova particula.
             Destroy(newHitMarker, 1f);
 
