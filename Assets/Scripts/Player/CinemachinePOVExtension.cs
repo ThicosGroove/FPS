@@ -19,12 +19,12 @@ public class CinemachinePOVExtension : CinemachineExtension
     private CinemachineVirtualCamera _virtualCamera;
     private Camera _mainCamera;
 
-    private InputManager _input;
+    private PlayerInput _input;
     private Vector3 _startingRotation;
 
     protected override void Awake()
     {
-        _input = InputManager.Instance;
+        _input = GetComponentInParent<PlayerInput>();
         _mainCamera = Camera.main;
 
         base.Awake();

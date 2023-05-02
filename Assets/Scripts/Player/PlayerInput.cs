@@ -1,14 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+[RequireComponent(typeof(FPSMove)), RequireComponent(typeof(PlayerWeaponAction))]
+public class PlayerInput : MonoBehaviour
 {
-    private static InputManager _instance;
-
-    public static InputManager Instance
-    {
-        get { return _instance; }
-    }
+    InputControl _input;
 
     [SerializeField] private bool _isShootCharging = false;
     [SerializeField] private bool _isShootStarted = false;
@@ -18,20 +16,9 @@ public class InputManager : MonoBehaviour
     public bool IsShootCharging { get { return _isShootCharging; } set { _isShootCharging = value; } }
     public bool IsShootGoOff { get { return _isShootGoOff; } set { _isShootGoOff = value; } }
 
-    InputControl _input;
 
     void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
-
-        //base.Awake();
         _input = new InputControl();
     }
 
@@ -58,7 +45,6 @@ public class InputManager : MonoBehaviour
         _input.Character.Shoot.canceled -= OnShootGoOff;
     }
 
-    #region Player Input
     public Vector2 GetPlayerMovement()
     {
         return _input.Character.Movement.ReadValue<Vector2>();
@@ -88,51 +74,29 @@ public class InputManager : MonoBehaviour
         return _input.Character.Jump.triggered;
     }
 
-    public bool GetPlayerCrouch()
-    {
-        return _input.Character.Crouch.triggered;
-    }
-
-    public bool GetPlayerAim()
-    {
-        return _input.Character.Aim.triggered;
-    }
 
     private void OnShootStart(InputAction.CallbackContext context)
     {
         _isShootStarted = true;
-        Debug.Log("Shoot Start Callback called");
     }
 
     public void OnShootCharge(InputAction.CallbackContext context)
     {
+
         _isShootCharging = true;
-        Debug.Log("Shoot Performed Callback called");
     }
 
     private void OnShootGoOff(InputAction.CallbackContext context)
     {
-        Debug.Log("Insinde context.canceled");
-        _isShootCharging = false;
-        _isShootGoOff = true;
- 
+        if (context.canceled)
+        {
+            _isShootCharging = false;
+            _isShootGoOff = true;
+        }
     }
 
     public bool PlayerChangeWeaponNext()
     {
         return _input.Character.ChangeWeaponNext.triggered;
     }
-
-
-    #endregion
-
-    #region System Input
-
-    public bool PlayerPause()
-    {
-        return _input.System.Pause.triggered;
-    }
-
-    #endregion
-
 }

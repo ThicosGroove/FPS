@@ -15,20 +15,22 @@ public class PlayerWeaponAction : MonoBehaviour
     private float _sizeMultiplier;
     private float _damageMultiplier;
 
-    InputManager _input;
+    PlayerInput _input;
 
     void Start()
     {
-        _input = InputManager.Instance;
+        _input = GetComponent<PlayerInput>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        _myWeapon = GetComponentInChildren<WeaponBehaviour>().gameObject;
+        _weaponShootBehaviour = _myWeapon.GetComponent<WeaponShootBehaviour>();
     }
 
     void Update()
     {
-        if (WeaponSelector.ActiveWeapon == null) return;
+        //if (WeaponSelector.ActiveWeapon == null) return;
 
-        _myWeapon = WeaponSelector.ActiveWeapon.WeaponPrefab.GetComponent<WeaponBehaviour>();
 
 
         ChargedShootBehaviour();
@@ -40,19 +42,10 @@ public class PlayerWeaponAction : MonoBehaviour
     {
         if (_input.IsShootCharging)
         {
-            // Começa a contar o timer
-            // O timer é a Porcentagem do tiro
-            // Aumenta o Dano 
-            // Aumenta o Tamanho
-
             _timer += Time.deltaTime;
 
-            //_damageMultiplier = _timer;   não tá funcionando da forma que eu queria
-            //_sizeMultiplier = _timer;
-
-            if (_timer >= timerThreshold)
+            if (_timer >= timerTreshold)
             {
-                //Atira sozinho depois do tempo limite
                 ShootBehaviour();
             }
         }
@@ -64,16 +57,14 @@ public class PlayerWeaponAction : MonoBehaviour
 
     private void ShootBehaviour()
     {
-        // Para o Timer e Atira
-        // usando o timer como porcentagem para o dano 
-        // e o tamanho do tiro
-
-        Debug.LogWarning(_myWeapon.MyWeaponSO.WeaponBaseDamage);
         _input.IsShootCharging = false;
         _input.IsShootStarted = false;
+        _input.IsShootGoOff = false;
+
         _damageMultiplier = 0;
         _sizeMultiplier = 0;
         _timer = 0;
-        _myWeapon.Shoot(_sizeMultiplier, _damageMultiplier); // Temporário, até entender como funciona o multiplicador
+
+        _weaponShootBehaviour.ProcessShoot(_sizeMultiplier, _damageMultiplier);
     }
 }

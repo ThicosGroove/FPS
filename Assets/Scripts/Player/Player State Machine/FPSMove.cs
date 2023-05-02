@@ -23,14 +23,14 @@ public class FPSMove : MonoBehaviour
     [SerializeField] private float dashSpeed = 30f;
     [SerializeField] private float dashTimer = 0.8f;
 
-    private InputManager _input;
+    private PlayerInput _input;
     private CharacterController _controller;
     private Transform _camTransform;
 
     private bool _ShouldDash => _input.GetPlayerDashThisFrame();
     private bool _ShouldJump => _input.GetPlayerJumpThisFrame();
-    private bool _ShouldCrouch => _input.GetPlayerCrouch();
-    private bool _isAiming => _input.GetPlayerAim();
+    //private bool _ShouldCrouch => _input.GetPlayerCrouch();
+    //private bool _isAiming => _input.GetPlayerAim();
 
     private Vector3 _playerVelocity;
     private Vector3 _moveDir;
@@ -39,7 +39,7 @@ public class FPSMove : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _camTransform = Camera.main.transform;
-        _input = InputManager.Instance;
+        _input = GetComponent<PlayerInput>();
     }
 
     void Update()

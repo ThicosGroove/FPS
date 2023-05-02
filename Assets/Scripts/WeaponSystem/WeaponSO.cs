@@ -14,7 +14,7 @@ public class WeaponSO : ScriptableObject
     public Vector3 SpawnRotation;
 
     public ShootConfigurationSO ShootConfig;
-    public TrailConfigurationSO TrailConfig;
+    //public TrailConfigurationSO TrailConfig;
 
     [Range(0, 1)] public float TimeToSwitchIn;
     [Range(0, 1)] public float TimeToSwitchOut;

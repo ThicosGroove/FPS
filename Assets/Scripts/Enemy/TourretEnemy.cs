@@ -79,4 +79,13 @@ public class TourretEnemy : AEnemy
     {
         Destroy(this.gameObject.GetComponentInParent<Transform>().gameObject);
     }
+
+    private void OnParticleCollision(GameObject other)
+    {
+        var damage = other.GetComponent<ParticleBehaviour>().finalDamage;
+
+        Debug.LogWarning($"Acertou {damage}");
+
+        LostHealth(damage);
+    }
 }

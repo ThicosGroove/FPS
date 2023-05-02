@@ -16,13 +16,13 @@ public class PlayerWeaponSelector : MonoBehaviour
     public WeaponSO ActiveWeapon;
 
     private WeaponBehaviour _myWeapon;
-    private InputManager _input;
+    private PlayerInput _input;
     private WeaponSO _currentWeapon;
     private int _currentWeaponIndex = 0;
 
     private void Start()
     {
-        _input = InputManager.Instance;
+        _input = GetComponent<PlayerInput>();
 
         _currentWeapon = WeaponsList.Find(currentWeapon => currentWeapon.Type == Weapon);
 
