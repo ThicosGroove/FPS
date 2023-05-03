@@ -8,14 +8,13 @@ public class PlayerInput : MonoBehaviour
 {
     InputControl _input;
 
-    [SerializeField] private bool _isShootCharging = false;
-    [SerializeField] private bool _isShootStarted = false;
-    [SerializeField] private bool _isShootGoOff = false;
+    private bool _isShootCharging = false;
+    private bool _isShootStarted = false;
+    private bool _isShootGoOff = false;
 
     public bool IsShootStarted { get { return _isShootStarted; } set { _isShootStarted = value; } }
     public bool IsShootCharging { get { return _isShootCharging; } set { _isShootCharging = value; } }
     public bool IsShootGoOff { get { return _isShootGoOff; } set { _isShootGoOff = value; } }
-
 
     void Awake()
     {

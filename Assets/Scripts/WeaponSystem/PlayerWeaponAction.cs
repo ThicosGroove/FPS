@@ -6,12 +6,17 @@ using UnityEngine.Serialization;
 [DisallowMultipleComponent]
 public class PlayerWeaponAction : MonoBehaviour
 {
-    [SerializeField] private PlayerWeaponSelector WeaponSelector;
+    [Space]
     [SerializeField] private float minChargedShoot = 0.5f; // minimo que precisa carregar 
     [SerializeField] private float timerThreshold = 2f;   // maximo de tempo que segura o tiro
-    
-    [SerializeField] private GameObject _myWeapon;
+
+    [Space]
+    [Header("Runtime Filled")]
+    [SerializeField] private GameObject _currentWeapon;
+
+    private PlayerWeaponSelector _weaponSelector;
     private WeaponShootBehaviour _weaponShootBehaviour;
+    private PlayerInput _input;
 
     private float _timer;
     private float _sizeMultiplier;
@@ -21,19 +26,22 @@ public class PlayerWeaponAction : MonoBehaviour
     private Vector3 _cameraPos;
     private Vector3 _cameraDirection;
 
-    PlayerInput _input;
+
+    //Criar sistema de combo
+    // 3 tiros com danos aumentando
 
     void Start()
     {
         _input = GetComponent<PlayerInput>();
+        _weaponSelector = GetComponent<PlayerWeaponSelector>();
 
         _mainCamera = Camera.main;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _myWeapon = WeaponSelector.activeWeapon;
-        _weaponShootBehaviour = _myWeapon.GetComponent<WeaponShootBehaviour>();
+        _currentWeapon = _weaponSelector.activeWeapon;
+        _weaponShootBehaviour = _currentWeapon.GetComponent<WeaponShootBehaviour>();
     }
 
     void Update()
@@ -44,8 +52,8 @@ public class PlayerWeaponAction : MonoBehaviour
 
     public void UpdateCurrentWeapon(GameObject currentWeapon)
     {
-        _myWeapon = currentWeapon;
-        _weaponShootBehaviour = _myWeapon.GetComponent<WeaponShootBehaviour>();
+        _currentWeapon = currentWeapon;
+        _weaponShootBehaviour = _currentWeapon.GetComponent<WeaponShootBehaviour>();
     }
 
     private void ChargedShootBehaviour()

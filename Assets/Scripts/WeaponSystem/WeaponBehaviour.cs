@@ -8,7 +8,6 @@ public class WeaponBehaviour : MonoBehaviour
     [SerializeField] public WeaponSO MyWeaponSO;
 
     private Animator _anim;
-    private InputManager _input;
 
     private void Start()
     {
@@ -19,15 +18,6 @@ public class WeaponBehaviour : MonoBehaviour
         {
             Debug.LogError("Não achou animator");
         }
-        _input = InputManager.Instance;
-    }
-
-    private void Update()
-    {
-        //if (_input.PlayerChangeWeaponNext())
-        //{
-        //    PlaySwithOutAnim();
-        //}
     }
 
     public void PlaySwithOutAnim()

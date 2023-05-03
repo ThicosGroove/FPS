@@ -6,6 +6,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class PlayerWeaponSelector : MonoBehaviour
 {
+    [Space]
+    [Header("Initial Weapon parameters")]
     [SerializeField] private WeaponType WeaponType;
     [SerializeField] private Transform WeaponParent;
     [SerializeField] private List<GameObject> WeaponsList;
@@ -27,8 +29,6 @@ public class PlayerWeaponSelector : MonoBehaviour
     {
         _input = GetComponent<PlayerInput>();
         _playerWeaponAction = GetComponent<PlayerWeaponAction>();
-
-
 
         activeWeapon = WeaponsList.Find(currentWeapon => currentWeapon.GetComponent<WeaponBehaviour>().MyWeaponSO.Type == WeaponType);
 

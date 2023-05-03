@@ -5,11 +5,13 @@ using UnityEngine;
 public class ParticleBehaviour : MonoBehaviour
 {
     [SerializeField] private GameObject particleHitMarker;
-
     [SerializeField] private ParticleSystem _particleSystemBullet;
+
     private List<ParticleCollisionEvent> _collisionEvents;
 
-    public float finalDamage;
+    private float _finalDamage;
+
+    public float FinalDamage { get => _finalDamage; private set { } }
 
     private void Start()
     {
@@ -20,7 +22,7 @@ public class ParticleBehaviour : MonoBehaviour
 
     public void ParticlePlay(float sizeMulti, float damageMulti)
     {
-        finalDamage = damageMulti;
+        _finalDamage = damageMulti;
 
         if (_particleSystemBullet == null)
         {

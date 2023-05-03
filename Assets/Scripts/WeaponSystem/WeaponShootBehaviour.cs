@@ -6,7 +6,6 @@ public class WeaponShootBehaviour : MonoBehaviour
 {
     [SerializeField] private WeaponSO MyWeaponSO;
     [SerializeField] private ParticleBehaviour _particleBehaviour;
-
     [SerializeField] private LayerMask hitMask;
 
     private float damage;

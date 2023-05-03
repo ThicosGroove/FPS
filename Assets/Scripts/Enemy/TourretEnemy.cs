@@ -82,7 +82,7 @@ public class TourretEnemy : AEnemy
 
     private void OnParticleCollision(GameObject other)
     {
-        var damage = other.GetComponent<ParticleBehaviour>().finalDamage;
+        var damage = other.GetComponent<ParticleBehaviour>().FinalDamage;
 
         Debug.LogWarning($"Acertou {damage}");
 
