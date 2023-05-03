@@ -26,10 +26,6 @@ public class PlayerWeaponAction : MonoBehaviour
     private Vector3 _cameraPos;
     private Vector3 _cameraDirection;
 
-
-    //Criar sistema de combo
-    // 3 tiros com danos aumentando
-
     void Start()
     {
         _input = GetComponent<PlayerInput>();

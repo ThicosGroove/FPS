@@ -8,11 +8,19 @@ public class WeaponShootBehaviour : MonoBehaviour
     [SerializeField] private ParticleBehaviour _particleBehaviour;
     [SerializeField] private LayerMask hitMask;
 
-    private float damage;
+    [Space]
+    [Header("Combo parameters")]
+    [SerializeField] private float _timeLimitToComboSeconds = 1f;
+    private Coroutine _comboCoroutine;
+    private bool _isSecondShoot = false;
+    private bool _isThirdShoot = false;
+
+    private float _damage;
+    private float _maxDistance = 1000f;
 
     private void Start()
     {
-        damage = MyWeaponSO.WeaponBaseDamage;
+        _damage = MyWeaponSO.WeaponBaseDamage;
     }
 
 
@@ -21,16 +29,40 @@ public class WeaponShootBehaviour : MonoBehaviour
     {     
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(pos, dir, out hitInfo, 1000f, hitMask))
+        if (Physics.Raycast(pos, dir, out hitInfo, _maxDistance, hitMask))
         {
             _particleBehaviour.gameObject.transform.LookAt(hitInfo.point);
 
-            Shoot(sizeMulti, damage);
+            ComboShot(sizeMulti);
         }
+    }
+
+    private void ComboShot(float sizeMulti)
+    {
+        var comboDamage =  _isThirdShoot ? _damage * 2.5f : _isSecondShoot ? _damage * 1.5f : _damage;
+
+        Shoot(sizeMulti, comboDamage);
     }
 
     private void Shoot(float sizeMulti, float damageMulti)
     {
         _particleBehaviour.ParticlePlay(sizeMulti, damageMulti);
+
+        if (_comboCoroutine != null) StopCoroutine(_comboCoroutine);       
+        _comboCoroutine = StartCoroutine(ComboTimeCO());
     }
+
+    IEnumerator ComboTimeCO()
+    {
+        if (_isSecondShoot && !_isThirdShoot) _isThirdShoot = true;
+
+        else _isSecondShoot = true;
+
+        yield return new WaitForSeconds(_timeLimitToComboSeconds);
+
+        _isSecondShoot = false;
+        _isThirdShoot = false;
+    }
+
+  
 }

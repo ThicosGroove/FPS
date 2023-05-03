@@ -10,7 +10,6 @@ public class ParticleBehaviour : MonoBehaviour
     private List<ParticleCollisionEvent> _collisionEvents;
 
     private float _finalDamage;
-
     public float FinalDamage { get => _finalDamage; private set { } }
 
     private void Start()

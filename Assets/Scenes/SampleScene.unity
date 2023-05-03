@@ -1839,7 +1839,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageText: {fileID: 2398140532695745751, guid: 82e31f3a497893b4f81557784962ce09, type: 3}
   damageTextPos: {fileID: 1678075656}
-  maxHealth: 50
+  maxHealth: 1000
   healthBar: {fileID: 2019970113}
   filledHealthtBar: {fileID: 1983099024}
 --- !u!54 &158765040
@@ -18868,10 +18868,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c419b4652e1c145a4b76f2084eece5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponSelector: {fileID: 8730030155000188238}
   minChargedShoot: 0.1
   timerThreshold: 1
-  _myWeapon: {fileID: 0}
+  _currentWeapon: {fileID: 0}
 --- !u!43 &1713177038
 Mesh:
   m_ObjectHideFlags: 0
@@ -22464,9 +22463,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b533b8fcacf1bf945abb62c7a002aec5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isShootCharging: 0
-  _isShootStarted: 0
-  _isShootGoOff: 0
 --- !u!114 &8730030155000188238
 MonoBehaviour:
   m_ObjectHideFlags: 0
