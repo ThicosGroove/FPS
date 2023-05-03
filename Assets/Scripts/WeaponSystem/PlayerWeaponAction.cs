@@ -16,11 +16,12 @@ public class PlayerWeaponAction : MonoBehaviour
 
     private PlayerWeaponSelector _weaponSelector;
     private WeaponShootBehaviour _weaponShootBehaviour;
+    private WeaponBehaviour _weaponBehaviour;
     private PlayerInput _input;
 
     private float _timer;
     private float _sizeMultiplier;
-    private float _damageMultiplier;
+    private float _holdPowerMultiplier;
 
     private Camera _mainCamera;
     private Vector3 _cameraPos;
@@ -38,6 +39,7 @@ public class PlayerWeaponAction : MonoBehaviour
 
         _currentWeapon = _weaponSelector.activeWeapon;
         _weaponShootBehaviour = _currentWeapon.GetComponent<WeaponShootBehaviour>();
+        _weaponBehaviour = _currentWeapon.GetComponent<WeaponBehaviour>();
     }
 
     void Update()
@@ -58,6 +60,9 @@ public class PlayerWeaponAction : MonoBehaviour
         {
             _timer += Time.deltaTime;
 
+            // Avisar _weaponBehaviour que está carregando
+            // Ligar particluas
+
             if (_timer >= timerThreshold)
             {
                 ShootBehaviour();
@@ -75,12 +80,13 @@ public class PlayerWeaponAction : MonoBehaviour
         _input.IsShootStarted = false;
         _input.IsShootGoOff = false;
 
-        _damageMultiplier = 0;
-        _sizeMultiplier = 0;
+        _holdPowerMultiplier = _timer;
+
+        _sizeMultiplier = _timer;
         _timer = 0;
 
         ShootDirection();
-        _weaponShootBehaviour.ProcessShoot(_cameraPos, _cameraDirection, _sizeMultiplier, _damageMultiplier);
+        _weaponShootBehaviour.ProcessShoot(_cameraPos, _cameraDirection, _sizeMultiplier, _holdPowerMultiplier);
     }
 
     private void ShootDirection()

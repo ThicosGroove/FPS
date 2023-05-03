@@ -22475,7 +22475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8be4c25f51cf8b2468df6ca2cc9081bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponType: 0
+  WeaponType: 2
   WeaponParent: {fileID: 1270667272}
   WeaponsList:
   - {fileID: 6859842178193715958, guid: 1524d61ea37d8784b84148462bc3d982, type: 3}

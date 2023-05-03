@@ -5018,12 +5018,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b16e8401d1ae1e5418e24d7c2a76b775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _weaponBehaviour: {fileID: -4493210355166631841}
   MyWeaponSO: {fileID: 11400000, guid: 00614ca57756f5b42a099b2f4208fbb2, type: 2}
   _particleBehaviour: {fileID: 3022285784856643107}
   hitMask:
     serializedVersion: 2
     m_Bits: 1527
   _timeLimitToComboSeconds: 3
-  _isFirstShoot: 1
-  _isSecondShoot: 0
-  _isThirdShoot: 0
+  _thirdShotMultiplier: 2
+  _secondShotMultiplier: 1.5

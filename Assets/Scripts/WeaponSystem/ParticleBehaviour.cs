@@ -14,14 +14,13 @@ public class ParticleBehaviour : MonoBehaviour
 
     private void Start()
     {
-        //_particleSystemBullet = GetComponent<ParticleSystem>();
         _collisionEvents = new List<ParticleCollisionEvent>();
     }
 
 
-    public void ParticlePlay(float sizeMulti, float damageMulti)
-    {
-        _finalDamage = damageMulti;
+    public void ParticlePlay(float sizeMulti, float comboDamage)
+    {    
+        _finalDamage = comboDamage;
 
         if (_particleSystemBullet == null)
         {
@@ -29,6 +28,8 @@ public class ParticleBehaviour : MonoBehaviour
             return;
         }
 
+        var main = _particleSystemBullet.main;
+        main.startSize = sizeMulti;
 
         _particleSystemBullet.Play();
     }
@@ -43,7 +44,7 @@ public class ParticleBehaviour : MonoBehaviour
 
         while (i < numCollisionEvents)
         {
-            Debug.LogWarning($"ACERTOU {other.name}");
+            //Debug.LogWarning($"ACERTOU {other.name}");
             var newHitMarker = Instantiate(particleHitMarker, _collisionEvents[i].intersection, Quaternion.LookRotation(_collisionEvents[i].normal));
             //Criar Pool para essa nova particula.
             Destroy(newHitMarker, 1f);
