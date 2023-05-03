@@ -60,8 +60,8 @@ public class PlayerWeaponAction : MonoBehaviour
         {
             _timer += Time.deltaTime;
 
-            // Avisar _weaponBehaviour que está carregando
-            // Ligar particluas
+            if (_timer > minChargedShoot) _weaponBehaviour.StartChargingParticles();
+         
 
             if (_timer >= timerThreshold)
             {
@@ -80,12 +80,14 @@ public class PlayerWeaponAction : MonoBehaviour
         _input.IsShootStarted = false;
         _input.IsShootGoOff = false;
 
-        _holdPowerMultiplier = _timer;
+        _weaponBehaviour.StopChargingParticles();
 
+        _holdPowerMultiplier = _timer;
         _sizeMultiplier = _timer;
         _timer = 0;
 
         ShootDirection();
+
         _weaponShootBehaviour.ProcessShoot(_cameraPos, _cameraDirection, _sizeMultiplier, _holdPowerMultiplier);
     }
 

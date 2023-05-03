@@ -8,8 +8,10 @@ public class WeaponBehaviour : MonoBehaviour
 {
     [SerializeField] public WeaponSO MyWeaponSO;
 
-    private WeaponShootBehaviour _weaponShootBehaviour;
+    [Space]
+    [SerializeField] private ParticleSystem _particleCharging;
 
+    private WeaponShootBehaviour _weaponShootBehaviour;
     private Animator _anim;
 
     private void Start()
@@ -29,6 +31,21 @@ public class WeaponBehaviour : MonoBehaviour
 
     // Animação para cada tiro do combo
 
+    public void StartChargingParticles()
+    {
+        if (_particleCharging.isPlaying) return;
+        Debug.LogWarning("START CHARGING");
+
+        _particleCharging.Play();
+    }
+
+    public void StopChargingParticles()
+    {
+        if (!_particleCharging.isPlaying) return;
+        Debug.LogWarning("STOP CHARGING");
+
+        _particleCharging.Stop();
+    }
 
     public void PlaySwithOutAnim()
     {
